@@ -304,11 +304,11 @@ Compresses historical records into health profiles
 Generates intelligent personalized recommendations
 
 **Recommendations**:
-- 🏃 Exercise (4-8 suggestions)
-- 🥗 Diet (4-8 suggestions)
-- 😴 Sleep (4-8 suggestions)
-- 💧 Hydration (3-4 suggestions)
-- ⚠️ Health Alerts (multiple)
+- Exercise (4-8 suggestions)
+- Diet (4-8 suggestions)
+- Sleep (4-8 suggestions)
+- Hydration (3-4 suggestions)
+- Health Alerts (multiple)
 
 **Features**:
 - Activity-level specific
