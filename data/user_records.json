@@ -1,0 +1,508 @@
+{
+  "records": [
+    {
+      "user_id": "demo_user_001",
+      "timestamp": "2026-02-06T20:39:10.130004",
+      "data": {
+        "age": 32,
+        "gender": "Male",
+        "height_cm": 180.0,
+        "weight_kg": 85.0,
+        "medical_conditions": "None",
+        "daily_steps": 8500,
+        "sleep_hours": 7.5,
+        "water_intake_liters": 2.5
+      }
+    },
+    {
+      "user_id": "demo_user_001",
+      "timestamp": "2026-02-06T20:39:10.132535",
+      "data": {
+        "age": 32,
+        "gender": "Male",
+        "height_cm": 180.0,
+        "weight_kg": 85.0,
+        "medical_conditions": "None",
+        "daily_steps": 10699,
+        "sleep_hours": 7.9,
+        "water_intake_liters": 3.3
+      }
+    },
+    {
+      "user_id": "demo_user_001",
+      "timestamp": "2026-02-06T20:39:10.134528",
+      "data": {
+        "age": 32,
+        "gender": "Male",
+        "height_cm": 180.0,
+        "weight_kg": 85.0,
+        "medical_conditions": "None",
+        "daily_steps": 6924,
+        "sleep_hours": 8.5,
+        "water_intake_liters": 3.0
+      }
+    },
+    {
+      "user_id": "demo_user_001",
+      "timestamp": "2026-02-06T20:39:10.136527",
+      "data": {
+        "age": 32,
+        "gender": "Male",
+        "height_cm": 180.0,
+        "weight_kg": 85.0,
+        "medical_conditions": "None",
+        "daily_steps": 10656,
+        "sleep_hours": 6.9,
+        "water_intake_liters": 1.7
+      }
+    },
+    {
+      "user_id": "demo_user_001",
+      "timestamp": "2026-02-06T20:39:10.138527",
+      "data": {
+        "age": 32,
+        "gender": "Male",
+        "height_cm": 180.0,
+        "weight_kg": 85.0,
+        "medical_conditions": "None",
+        "daily_steps": 8138,
+        "sleep_hours": 7.9,
+        "water_intake_liters": 2.3
+      }
+    },
+    {
+      "user_id": "demo_user_001",
+      "timestamp": "2026-02-06T20:39:10.139540",
+      "data": {
+        "age": 32,
+        "gender": "Male",
+        "height_cm": 180.0,
+        "weight_kg": 85.0,
+        "medical_conditions": "None",
+        "daily_steps": 6901,
+        "sleep_hours": 6.3,
+        "water_intake_liters": 3.0
+      }
+    },
+    {
+      "user_id": "demo_user_001",
+      "timestamp": "2026-02-06T20:39:10.140530",
+      "data": {
+        "age": 32,
+        "gender": "Male",
+        "height_cm": 180.0,
+        "weight_kg": 85.0,
+        "medical_conditions": "None",
+        "daily_steps": 7425,
+        "sleep_hours": 8.3,
+        "water_intake_liters": 2.1
+      }
+    },
+    {
+      "user_id": "demo_user_001",
+      "timestamp": "2026-02-06T20:39:10.141528",
+      "data": {
+        "age": 32,
+        "gender": "Male",
+        "height_cm": 180.0,
+        "weight_kg": 85.0,
+        "medical_conditions": "None",
+        "daily_steps": 10077,
+        "sleep_hours": 8.3,
+        "water_intake_liters": 1.5
+      }
+    },
+    {
+      "user_id": "demo_user_001",
+      "timestamp": "2026-02-06T20:39:10.142528",
+      "data": {
+        "age": 32,
+        "gender": "Male",
+        "height_cm": 180.0,
+        "weight_kg": 85.0,
+        "medical_conditions": "None",
+        "daily_steps": 8952,
+        "sleep_hours": 6.5,
+        "water_intake_liters": 1.9
+      }
+    },
+    {
+      "user_id": "demo_user_001",
+      "timestamp": "2026-02-06T20:39:10.144052",
+      "data": {
+        "age": 32,
+        "gender": "Male",
+        "height_cm": 180.0,
+        "weight_kg": 85.0,
+        "medical_conditions": "None",
+        "daily_steps": 7115,
+        "sleep_hours": 6.2,
+        "water_intake_liters": 1.7
+      }
+    },
+    {
+      "user_id": "demo_user_001",
+      "timestamp": "2026-02-06T20:39:10.145071",
+      "data": {
+        "age": 32,
+        "gender": "Male",
+        "height_cm": 180.0,
+        "weight_kg": 85.0,
+        "medical_conditions": "None",
+        "daily_steps": 6339,
+        "sleep_hours": 8.1,
+        "water_intake_liters": 3.1
+      }
+    },
+    {
+      "user_id": "scenario_sedentary_office_worker",
+      "timestamp": "2026-02-06T20:44:40.936366",
+      "data": {
+        "age": 35,
+        "gender": "Male",
+        "height_cm": 175.0,
+        "weight_kg": 90.0,
+        "medical_conditions": "High cholesterol",
+        "daily_steps": 2500,
+        "sleep_hours": 6.5,
+        "water_intake_liters": 1.2
+      }
+    },
+    {
+      "user_id": "scenario_sedentary_office_worker",
+      "timestamp": "2026-02-06T20:44:40.937365",
+      "data": {
+        "age": 35,
+        "gender": "Male",
+        "height_cm": 175.0,
+        "weight_kg": 90.0,
+        "medical_conditions": "High cholesterol",
+        "daily_steps": 2800,
+        "sleep_hours": 6.0,
+        "water_intake_liters": 1.0
+      }
+    },
+    {
+      "user_id": "scenario_sedentary_office_worker",
+      "timestamp": "2026-02-06T20:44:40.939365",
+      "data": {
+        "age": 35,
+        "gender": "Male",
+        "height_cm": 175.0,
+        "weight_kg": 90.0,
+        "medical_conditions": "High cholesterol",
+        "daily_steps": 2200,
+        "sleep_hours": 7.0,
+        "water_intake_liters": 1.5
+      }
+    },
+    {
+      "user_id": "scenario_sedentary_office_worker",
+      "timestamp": "2026-02-06T20:44:40.940365",
+      "data": {
+        "age": 35,
+        "gender": "Male",
+        "height_cm": 175.0,
+        "weight_kg": 90.0,
+        "medical_conditions": "High cholesterol",
+        "daily_steps": 3000,
+        "sleep_hours": 6.5,
+        "water_intake_liters": 1.3
+      }
+    },
+    {
+      "user_id": "scenario_sedentary_office_worker",
+      "timestamp": "2026-02-06T20:44:40.941365",
+      "data": {
+        "age": 35,
+        "gender": "Male",
+        "height_cm": 175.0,
+        "weight_kg": 90.0,
+        "medical_conditions": "High cholesterol",
+        "daily_steps": 2600,
+        "sleep_hours": 5.5,
+        "water_intake_liters": 0.9
+      }
+    },
+    {
+      "user_id": "scenario_active_fitness_enthusiast",
+      "timestamp": "2026-02-06T20:44:40.975447",
+      "data": {
+        "age": 28,
+        "gender": "Female",
+        "height_cm": 168.0,
+        "weight_kg": 62.0,
+        "medical_conditions": "None",
+        "daily_steps": 12000,
+        "sleep_hours": 8.0,
+        "water_intake_liters": 3.5
+      }
+    },
+    {
+      "user_id": "scenario_active_fitness_enthusiast",
+      "timestamp": "2026-02-06T20:44:40.977472",
+      "data": {
+        "age": 28,
+        "gender": "Female",
+        "height_cm": 168.0,
+        "weight_kg": 62.0,
+        "medical_conditions": "None",
+        "daily_steps": 15000,
+        "sleep_hours": 7.5,
+        "water_intake_liters": 3.2
+      }
+    },
+    {
+      "user_id": "scenario_active_fitness_enthusiast",
+      "timestamp": "2026-02-06T20:44:40.978486",
+      "data": {
+        "age": 28,
+        "gender": "Female",
+        "height_cm": 168.0,
+        "weight_kg": 62.0,
+        "medical_conditions": "None",
+        "daily_steps": 11500,
+        "sleep_hours": 8.5,
+        "water_intake_liters": 3.8
+      }
+    },
+    {
+      "user_id": "scenario_active_fitness_enthusiast",
+      "timestamp": "2026-02-06T20:44:40.979486",
+      "data": {
+        "age": 28,
+        "gender": "Female",
+        "height_cm": 168.0,
+        "weight_kg": 62.0,
+        "medical_conditions": "None",
+        "daily_steps": 13000,
+        "sleep_hours": 8.0,
+        "water_intake_liters": 3.4
+      }
+    },
+    {
+      "user_id": "scenario_active_fitness_enthusiast",
+      "timestamp": "2026-02-06T20:44:40.980486",
+      "data": {
+        "age": 28,
+        "gender": "Female",
+        "height_cm": 168.0,
+        "weight_kg": 62.0,
+        "medical_conditions": "None",
+        "daily_steps": 14200,
+        "sleep_hours": 7.5,
+        "water_intake_liters": 3.6
+      }
+    },
+    {
+      "user_id": "scenario_elderly_person",
+      "timestamp": "2026-02-06T20:44:40.987486",
+      "data": {
+        "age": 68,
+        "gender": "Female",
+        "height_cm": 162.0,
+        "weight_kg": 72.0,
+        "medical_conditions": "Diabetes, Hypertension",
+        "daily_steps": 4500,
+        "sleep_hours": 7.5,
+        "water_intake_liters": 2.0
+      }
+    },
+    {
+      "user_id": "scenario_elderly_person",
+      "timestamp": "2026-02-06T20:44:40.988486",
+      "data": {
+        "age": 68,
+        "gender": "Female",
+        "height_cm": 162.0,
+        "weight_kg": 72.0,
+        "medical_conditions": "Diabetes, Hypertension",
+        "daily_steps": 5000,
+        "sleep_hours": 8.0,
+        "water_intake_liters": 2.2
+      }
+    },
+    {
+      "user_id": "scenario_elderly_person",
+      "timestamp": "2026-02-06T20:44:40.991488",
+      "data": {
+        "age": 68,
+        "gender": "Female",
+        "height_cm": 162.0,
+        "weight_kg": 72.0,
+        "medical_conditions": "Diabetes, Hypertension",
+        "daily_steps": 4200,
+        "sleep_hours": 7.5,
+        "water_intake_liters": 1.8
+      }
+    },
+    {
+      "user_id": "scenario_elderly_person",
+      "timestamp": "2026-02-06T20:44:40.992486",
+      "data": {
+        "age": 68,
+        "gender": "Female",
+        "height_cm": 162.0,
+        "weight_kg": 72.0,
+        "medical_conditions": "Diabetes, Hypertension",
+        "daily_steps": 5500,
+        "sleep_hours": 8.5,
+        "water_intake_liters": 2.1
+      }
+    },
+    {
+      "user_id": "scenario_elderly_person",
+      "timestamp": "2026-02-06T20:44:40.994526",
+      "data": {
+        "age": 68,
+        "gender": "Female",
+        "height_cm": 162.0,
+        "weight_kg": 72.0,
+        "medical_conditions": "Diabetes, Hypertension",
+        "daily_steps": 4800,
+        "sleep_hours": 7.5,
+        "water_intake_liters": 1.9
+      }
+    },
+    {
+      "user_id": "scenario_sleep-deprived_professional",
+      "timestamp": "2026-02-06T20:44:41.002535",
+      "data": {
+        "age": 42,
+        "gender": "Male",
+        "height_cm": 182.0,
+        "weight_kg": 88.0,
+        "medical_conditions": "Stress",
+        "daily_steps": 6500,
+        "sleep_hours": 4.5,
+        "water_intake_liters": 2.0
+      }
+    },
+    {
+      "user_id": "scenario_sleep-deprived_professional",
+      "timestamp": "2026-02-06T20:44:41.003541",
+      "data": {
+        "age": 42,
+        "gender": "Male",
+        "height_cm": 182.0,
+        "weight_kg": 88.0,
+        "medical_conditions": "Stress",
+        "daily_steps": 7000,
+        "sleep_hours": 5.0,
+        "water_intake_liters": 2.1
+      }
+    },
+    {
+      "user_id": "scenario_sleep-deprived_professional",
+      "timestamp": "2026-02-06T20:44:41.004537",
+      "data": {
+        "age": 42,
+        "gender": "Male",
+        "height_cm": 182.0,
+        "weight_kg": 88.0,
+        "medical_conditions": "Stress",
+        "daily_steps": 6200,
+        "sleep_hours": 4.5,
+        "water_intake_liters": 1.9
+      }
+    },
+    {
+      "user_id": "scenario_sleep-deprived_professional",
+      "timestamp": "2026-02-06T20:44:41.006040",
+      "data": {
+        "age": 42,
+        "gender": "Male",
+        "height_cm": 182.0,
+        "weight_kg": 88.0,
+        "medical_conditions": "Stress",
+        "daily_steps": 6800,
+        "sleep_hours": 5.5,
+        "water_intake_liters": 2.0
+      }
+    },
+    {
+      "user_id": "scenario_sleep-deprived_professional",
+      "timestamp": "2026-02-06T20:44:41.007053",
+      "data": {
+        "age": 42,
+        "gender": "Male",
+        "height_cm": 182.0,
+        "weight_kg": 88.0,
+        "medical_conditions": "Stress",
+        "daily_steps": 7200,
+        "sleep_hours": 4.0,
+        "water_intake_liters": 2.2
+      }
+    },
+    {
+      "user_id": "scenario_fitness_journey_beginner",
+      "timestamp": "2026-02-06T20:44:41.017171",
+      "data": {
+        "age": 45,
+        "gender": "Female",
+        "height_cm": 165.0,
+        "weight_kg": 95.0,
+        "medical_conditions": "Prediabetes",
+        "daily_steps": 3200,
+        "sleep_hours": 7.0,
+        "water_intake_liters": 1.5
+      }
+    },
+    {
+      "user_id": "scenario_fitness_journey_beginner",
+      "timestamp": "2026-02-06T20:44:41.019178",
+      "data": {
+        "age": 45,
+        "gender": "Female",
+        "height_cm": 165.0,
+        "weight_kg": 95.0,
+        "medical_conditions": "Prediabetes",
+        "daily_steps": 3800,
+        "sleep_hours": 7.5,
+        "water_intake_liters": 1.8
+      }
+    },
+    {
+      "user_id": "scenario_fitness_journey_beginner",
+      "timestamp": "2026-02-06T20:44:41.020283",
+      "data": {
+        "age": 45,
+        "gender": "Female",
+        "height_cm": 165.0,
+        "weight_kg": 95.0,
+        "medical_conditions": "Prediabetes",
+        "daily_steps": 4200,
+        "sleep_hours": 6.5,
+        "water_intake_liters": 1.6
+      }
+    },
+    {
+      "user_id": "scenario_fitness_journey_beginner",
+      "timestamp": "2026-02-06T20:44:41.022296",
+      "data": {
+        "age": 45,
+        "gender": "Female",
+        "height_cm": 165.0,
+        "weight_kg": 95.0,
+        "medical_conditions": "Prediabetes",
+        "daily_steps": 4500,
+        "sleep_hours": 7.5,
+        "water_intake_liters": 1.9
+      }
+    },
+    {
+      "user_id": "scenario_fitness_journey_beginner",
+      "timestamp": "2026-02-06T20:44:41.023301",
+      "data": {
+        "age": 45,
+        "gender": "Female",
+        "height_cm": 165.0,
+        "weight_kg": 95.0,
+        "medical_conditions": "Prediabetes",
+        "daily_steps": 3900,
+        "sleep_hours": 7.0,
+        "water_intake_liters": 1.7
+      }
+    }
+  ]
+}

@@ -1,0 +1,173 @@
+{
+  "profiles": [
+    {
+      "user_id": "demo_user_001",
+      "data": {
+        "age": 32,
+        "gender": "Male",
+        "height_cm": 180.0,
+        "weight_kg": 85.0,
+        "medical_conditions": "None",
+        "average_steps": 8339.0,
+        "average_sleep_hours": 7.49,
+        "average_water_intake": 2.37,
+        "steps_std_dev": 1575.0,
+        "sleep_std_dev": 0.86,
+        "water_std_dev": 0.65,
+        "total_records": 11,
+        "days_tracked": 11,
+        "bmi": 26.23,
+        "bmi_category": "Overweight",
+        "activity_level": "Moderately Active",
+        "sleep_category": "Optimal",
+        "hydration_level": "Adequate",
+        "health_risks": []
+      },
+      "created_at": "2026-02-06T20:39:10.149595",
+      "last_updated": "2026-02-06T20:39:10.149595"
+    },
+    {
+      "user_id": "scenario_sedentary_office_worker",
+      "data": {
+        "age": 35,
+        "gender": "Male",
+        "height_cm": 175.0,
+        "weight_kg": 90.0,
+        "medical_conditions": "High cholesterol",
+        "average_steps": 2620.0,
+        "average_sleep_hours": 6.3,
+        "average_water_intake": 1.18,
+        "steps_std_dev": 303.0,
+        "sleep_std_dev": 0.57,
+        "water_std_dev": 0.24,
+        "total_records": 5,
+        "days_tracked": 5,
+        "bmi": 29.39,
+        "bmi_category": "Overweight",
+        "activity_level": "Sedentary",
+        "sleep_category": "Below Optimal",
+        "hydration_level": "Dehydrated",
+        "health_risks": [
+          "Sedentary Lifestyle: Increase physical activity to reduce health risks",
+          "Hydration: Dehydrated - Increase water intake",
+          "Medical Conditions: High cholesterol - Follow doctor's advice"
+        ]
+      },
+      "created_at": "2026-02-06T20:44:40.965447",
+      "last_updated": "2026-02-06T20:44:40.965447"
+    },
+    {
+      "user_id": "scenario_active_fitness_enthusiast",
+      "data": {
+        "age": 28,
+        "gender": "Female",
+        "height_cm": 168.0,
+        "weight_kg": 62.0,
+        "medical_conditions": "None",
+        "average_steps": 13140.0,
+        "average_sleep_hours": 7.9,
+        "average_water_intake": 3.5,
+        "steps_std_dev": 1466.0,
+        "sleep_std_dev": 0.42,
+        "water_std_dev": 0.22,
+        "total_records": 5,
+        "days_tracked": 5,
+        "bmi": 21.97,
+        "bmi_category": "Normal Weight",
+        "activity_level": "Very Active",
+        "sleep_category": "Optimal",
+        "hydration_level": "Well Hydrated",
+        "health_risks": []
+      },
+      "created_at": "2026-02-06T20:44:40.983487",
+      "last_updated": "2026-02-06T20:44:40.983487"
+    },
+    {
+      "user_id": "scenario_elderly_person",
+      "data": {
+        "age": 68,
+        "gender": "Female",
+        "height_cm": 162.0,
+        "weight_kg": 72.0,
+        "medical_conditions": "Diabetes, Hypertension",
+        "average_steps": 4800.0,
+        "average_sleep_hours": 7.8,
+        "average_water_intake": 2.0,
+        "steps_std_dev": 495.0,
+        "sleep_std_dev": 0.45,
+        "water_std_dev": 0.16,
+        "total_records": 5,
+        "days_tracked": 5,
+        "bmi": 27.43,
+        "bmi_category": "Overweight",
+        "activity_level": "Lightly Active",
+        "sleep_category": "Optimal",
+        "hydration_level": "Adequate",
+        "health_risks": [
+          "Medical Conditions: Diabetes, Hypertension - Follow doctor's advice"
+        ]
+      },
+      "created_at": "2026-02-06T20:44:40.999199",
+      "last_updated": "2026-02-06T20:44:40.999199"
+    },
+    {
+      "user_id": "scenario_sleep-deprived_professional",
+      "data": {
+        "age": 42,
+        "gender": "Male",
+        "height_cm": 182.0,
+        "weight_kg": 88.0,
+        "medical_conditions": "Stress",
+        "average_steps": 6740.0,
+        "average_sleep_hours": 4.7,
+        "average_water_intake": 2.04,
+        "steps_std_dev": 397.0,
+        "sleep_std_dev": 0.57,
+        "water_std_dev": 0.11,
+        "total_records": 5,
+        "days_tracked": 5,
+        "bmi": 26.57,
+        "bmi_category": "Overweight",
+        "activity_level": "Lightly Active",
+        "sleep_category": "Insufficient",
+        "hydration_level": "Adequate",
+        "health_risks": [
+          "Sleep Pattern: Insufficient - May affect overall health",
+          "Medical Conditions: Stress - Follow doctor's advice"
+        ]
+      },
+      "created_at": "2026-02-06T20:44:41.012953",
+      "last_updated": "2026-02-06T20:44:41.012953"
+    },
+    {
+      "user_id": "scenario_fitness_journey_beginner",
+      "data": {
+        "age": 45,
+        "gender": "Female",
+        "height_cm": 165.0,
+        "weight_kg": 95.0,
+        "medical_conditions": "Prediabetes",
+        "average_steps": 3920.0,
+        "average_sleep_hours": 7.1,
+        "average_water_intake": 1.7,
+        "steps_std_dev": 487.0,
+        "sleep_std_dev": 0.42,
+        "water_std_dev": 0.16,
+        "total_records": 5,
+        "days_tracked": 5,
+        "bmi": 34.89,
+        "bmi_category": "Obese",
+        "activity_level": "Lightly Active",
+        "sleep_category": "Optimal",
+        "hydration_level": "Below Recommended",
+        "health_risks": [
+          "BMI Category: Obese - Consider consulting a healthcare provider",
+          "Hydration: Below Recommended - Increase water intake",
+          "Medical Conditions: Prediabetes - Follow doctor's advice"
+        ]
+      },
+      "created_at": "2026-02-06T20:44:41.026351",
+      "last_updated": "2026-02-06T20:44:41.026351"
+    }
+  ]
+}
