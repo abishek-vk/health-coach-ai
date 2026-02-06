@@ -120,6 +120,10 @@ def generate_theme_css(theme):
     
     css = f"""
     <style>
+    * {{
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }}
+    
     /* Root Colors - Dynamically set based on theme */
     :root {{
         --primary-color: {colors['primary']};
@@ -145,45 +149,46 @@ def generate_theme_css(theme):
     /* Professional Header */
     .header-container {{
         background: linear-gradient(135deg, {colors['primary']} 0%, {colors['secondary']} 100%);
-        padding: 40px 20px;
-        border-radius: 12px;
+        padding: 50px 40px;
+        border-radius: 16px;
         color: white;
-        margin-bottom: 30px;
-        box-shadow: 0 4px 15px {colors['shadow']};
+        margin-bottom: 40px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.15);
         transition: all 0.3s ease;
     }}
     
     .header-title {{
-        font-size: 3.5rem;
+        font-size: 3.2rem;
         font-weight: 700;
         margin: 0;
         color: white;
-        text-shadow: 0 2px 4px {colors['shadow']};
+        letter-spacing: -0.5px;
     }}
     
     .header-subtitle {{
-        font-size: 1.1rem;
-        font-weight: 300;
-        margin-top: 10px;
-        opacity: 0.95;
+        font-size: 1.05rem;
+        font-weight: 400;
+        margin-top: 12px;
+        opacity: 0.92;
         color: white;
+        line-height: 1.6;
     }}
     
     /* Card Styling */
     .metric-card {{
         background: {colors['bg_secondary']};
-        padding: 25px;
-        border-radius: 12px;
-        margin: 15px 0;
-        border-left: 5px solid {colors['primary']};
-        box-shadow: 0 2px 8px {colors['shadow']};
+        padding: 28px 32px;
+        border-radius: 14px;
+        margin: 18px 0;
+        border-left: 6px solid {colors['primary']};
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         transition: all 0.3s ease;
         color: {colors['text_primary']};
     }}
     
     .metric-card:hover {{
-        box-shadow: 0 6px 16px {colors['shadow']};
-        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        transform: translateY(-3px);
         background-color: {colors['card_hover']};
     }}
     
@@ -200,241 +205,215 @@ def generate_theme_css(theme):
     }}
     
     .metric-value {{
-        font-size: 2.2rem;
+        font-size: 2.4rem;
         font-weight: 700;
         color: {colors['primary']};
-        margin: 10px 0;
+        margin: 12px 0 8px 0;
+        letter-spacing: -1px;
     }}
     
     .metric-label {{
-        font-size: 0.95rem;
+        font-size: 0.92rem;
         color: {colors['text_secondary']};
         font-weight: 600;
         text-transform: uppercase;
-        letter-spacing: 0.5px;
+        letter-spacing: 0.8px;
     }}
     
     .metric-unit {{
-        font-size: 0.85rem;
+        font-size: 0.88rem;
         color: {colors['text_secondary']};
-        margin-left: 5px;
-        opacity: 0.7;
+        margin-left: 6px;
+        opacity: 0.75;
+        font-weight: 500;
     }}
     
     /* Alert Boxes */
-    .alert-box {{
-        background-color: {colors['warning']};
-        border-left: 5px solid {colors['accent']};
-        padding: 18px;
-        border-radius: 8px;
-        margin: 15px 0;
-        color: #333;
+    .info-box {{
+        background-color: {colors['secondary']}22;
+        border-left: 5px solid {colors['secondary']};
+        padding: 18px 22px;
+        border-radius: 10px;
+        margin: 16px 0;
+        color: {colors['text_primary']};
         font-size: 0.95rem;
         line-height: 1.6;
         transition: all 0.3s ease;
+    }}
+    
+    .warning-box {{
+        background-color: {colors['warning']}22;
+        border-left: 5px solid {colors['warning']};
+        padding: 18px 22px;
+        border-radius: 10px;
+        margin: 16px 0;
+        color: {colors['text_primary']};
+        font-size: 0.95rem;
+        line-height: 1.6;
     }}
     
     .success-box {{
-        background-color: {colors['success']};
+        background-color: {colors['success']}33;
         border-left: 5px solid {colors['success']};
-        padding: 18px;
-        border-radius: 8px;
-        margin: 15px 0;
-        color: white;
+        padding: 18px 22px;
+        border-radius: 10px;
+        margin: 16px 0;
+        color: {colors['text_primary']};
         font-size: 0.95rem;
-        line-height: 1.6;
-        transition: all 0.3s ease;
-        opacity: 0.9;
     }}
     
     .danger-box {{
-        background-color: {colors['danger']};
+        background-color: {colors['danger']}22;
         border-left: 5px solid {colors['danger']};
-        padding: 18px;
-        border-radius: 8px;
-        margin: 15px 0;
-        color: white;
+        padding: 18px 22px;
+        border-radius: 10px;
+        margin: 16px 0;
+        color: {colors['text_primary']};
         font-size: 0.95rem;
-        line-height: 1.6;
-        transition: all 0.3s ease;
-        opacity: 0.9;
-    }}
-    
-    .info-box {{
-        background-color: {colors['secondary']};
-        border-left: 5px solid {colors['secondary']};
-        padding: 18px;
-        border-radius: 8px;
-        margin: 15px 0;
-        color: white;
-        font-size: 0.95rem;
-        line-height: 1.6;
-        transition: all 0.3s ease;
-        opacity: 0.9;
     }}
     
     /* Section Headers */
     .section-header {{
-        font-size: 1.8rem;
+        font-size: 2rem;
         font-weight: 700;
         color: {colors['primary']};
-        margin: 30px 0 20px 0;
-        padding-bottom: 15px;
+        margin: 36px 0 24px 0;
+        padding-bottom: 16px;
         border-bottom: 3px solid {colors['primary']};
-        transition: all 0.3s ease;
+    }}
+    
+    .subsection-header {{
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: {colors['primary']};
+        margin: 24px 0 16px 0;
     }}
     
     /* Tab Styling */
     .stTabs [data-baseweb="tab-list"] {{
-        background-color: {colors['bg_main']};
-        border-radius: 8px;
-        padding: 5px;
+        background-color: transparent;
+        border-radius: 0;
+        padding: 0;
+        border-bottom: 2px solid {colors['border']};
     }}
     
     .stTabs [data-baseweb="tab"] {{
-        background-color: {colors['bg_secondary']};
-        border-radius: 6px;
-        margin: 5px;
+        background-color: transparent;
+        border-radius: 0;
         color: {colors['text_primary']};
+        border-bottom: 3px solid transparent;
+        padding: 12px 24px;
+        font-weight: 600;
         transition: all 0.3s ease;
+    }}
+    
+    .stTabs [aria-selected="true"] {{
+        border-bottom-color: {colors['primary']} !important;
+        color: {colors['primary']} !important;
     }}
     
     /* Buttons */
     .stButton > button {{
-        background-color: {colors['primary']} !important;
+        background: linear-gradient(135deg, {colors['primary']} 0%, {colors['success']} 100%);
         color: white !important;
         border: none !important;
-        border-radius: 6px !important;
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+        padding: 10px 24px !important;
         transition: all 0.3s ease !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
     }}
     
     .stButton > button:hover {{
-        background-color: {colors['secondary']} !important;
-        box-shadow: 0 4px 12px {colors['shadow']} !important;
-    }}
-    
-    /* Text Color Adjustments */
-    p, span, label {{
-        color: {colors['text_primary']};
-        transition: color 0.3s ease;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.2) !important;
+        transform: translateY(-2px) !important;
     }}
     
     /* Input Fields */
     .stTextInput > div > div > input,
     .stSelectbox > div > div > select,
-    .stNumberInput > div > div > input {{
+    .stNumberInput > div > div > input,
+    .stTextArea > div > div > textarea {{
         background-color: {colors['bg_secondary']} !important;
         color: {colors['text_primary']} !important;
-        border-color: {colors['border']} !important;
+        border: 2px solid {colors['border']} !important;
+        border-radius: 8px !important;
+        padding: 12px 14px !important;
+        font-size: 0.95rem !important;
         transition: all 0.3s ease !important;
     }}
     
     .stTextInput > div > div > input:focus,
     .stSelectbox > div > div > select:focus,
-    .stNumberInput > div > div > input:focus {{
+    .stNumberInput > div > div > input:focus,
+    .stTextArea > div > div > textarea:focus {{
         border-color: {colors['primary']} !important;
-        box-shadow: 0 0 0 3px {colors['primary']}44 !important;
+        box-shadow: 0 0 0 3px {colors['primary']}33 !important;
+    }}
+    
+    /* Labels */
+    .stLabel > label {{
+        font-weight: 600 !important;
+        color: {colors['text_primary']} !important;
+        font-size: 0.95rem !important;
+        margin-bottom: 8px !important;
     }}
     
     /* Divider */
     .divider {{
-        margin: 30px 0;
-        border-bottom: 2px solid {colors['border']};
-    }}
-    
-    /* Progress Bar */
-    .progress-container {{
-        margin: 20px 0;
-    }}
-    
-    .progress-bar {{
-        background-color: {colors['bg_tertiary']};
-        border-radius: 10px;
-        height: 8px;
-        overflow: hidden;
-    }}
-    
-    .progress-bar-fill {{
-        background: linear-gradient(90deg, {colors['primary']}, {colors['success']});
-        height: 100%;
-        border-radius: 10px;
-        transition: width 0.3s ease;
+        margin: 32px 0;
+        border: none;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, {colors['border']}, transparent);
     }}
     
     /* Sidebar */
-    .sidebar-container {{
-        background: linear-gradient(180deg, {colors['primary']} 0%, {colors['secondary']} 100%);
-        color: white;
-        padding: 20px;
-        border-radius: 10px;
-        margin-bottom: 20px;
-    }}
-    
-    .user-info {{
-        background-color: rgba(255,255,255,0.1);
-        padding: 15px;
-        border-radius: 8px;
-        margin: 10px 0;
-        border-left: 4px solid {colors['warning']};
-    }}
-    
-    /* Badge */
-    .badge {{
-        display: inline-block;
-        padding: 6px 12px;
-        border-radius: 20px;
-        font-size: 0.85rem;
-        font-weight: 600;
-        margin: 5px 5px 5px 0;
-    }}
-    
-    .badge-success {{
-        background-color: {colors['success']};
-        color: white;
-    }}
-    
-    .badge-warning {{
-        background-color: {colors['warning']};
-        color: #333;
-    }}
-    
-    .badge-danger {{
-        background-color: {colors['danger']};
-        color: white;
-    }}
-    
-    .badge-info {{
-        background-color: {colors['secondary']};
-        color: white;
-    }}
-    
-    /* Footer */
-    .footer {{
-        text-align: center;
-        color: {colors['text_secondary']};
-        font-size: 0.85rem;
-        margin-top: 40px;
-        padding: 20px;
-        border-top: 1px solid {colors['border']};
+    [data-testid="stSidebar"] {{
+        background: {colors['bg_secondary']};
     }}
     
     /* Chart Container */
     .chart-container {{
         background-color: {colors['bg_secondary']};
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 2px 8px {colors['shadow']};
+        padding: 24px;
+        border-radius: 14px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         margin: 20px 0;
+        border: 1px solid {colors['border']};
+    }}
+    
+    /* Professional Text */
+    h1, h2, h3, h4, h5, h6 {{
+        color: {colors['primary']};
+        font-weight: 700;
+        letter-spacing: -0.5px;
+    }}
+    
+    code {{
+        background-color: {colors['bg_secondary']};
+        border: 1px solid {colors['border']};
+        border-radius: 6px;
+        padding: 2px 8px;
+        color: {colors['text_primary']};
+        font-family: 'Monaco', 'Courier New', monospace;
     }}
     
     /* Responsive adjustments */
     @media (max-width: 768px) {{
         .header-title {{
-            font-size: 2rem;
+            font-size: 2.2rem;
+        }}
+        
+        .header-container {{
+            padding: 36px 28px;
         }}
         
         .metric-card {{
-            margin: 10px 0;
+            padding: 20px 24px;
+        }}
+        
+        .metric-value {{
+            font-size: 2rem;
         }}
     }}
     </style>
@@ -463,13 +442,13 @@ def initialize_session_state():
 # ============================================================================
 # UTILITY FUNCTIONS
 # ============================================================================
-def create_metric_card(label, value, unit="", category="", emoji="📊"):
+def create_metric_card(label, value, unit="", category=""):
     """Create a styled metric card"""
     card_html = f"""
     <div class="metric-card">
         <div style="display: flex; align-items: center; justify-content: space-between;">
             <div>
-                <div class="metric-label">{emoji} {label}</div>
+                <div class="metric-label">{label}</div>
                 <div class="metric-value">{value}<span class="metric-unit">{unit}</span></div>
                 {f'<span class="badge badge-{get_badge_type(category)}">{category}</span>' if category else ''}
             </div>
@@ -502,7 +481,7 @@ def display_professional_header():
     
     st.markdown(f"""
     <div class="header-container">
-        <h1 class="header-title">🏥 Health Coach AI</h1>
+        <h1 class="header-title">Health Coach AI</h1>
         <p class="header-subtitle">Your Intelligent Personal Health & Wellness Companion</p>
     </div>
     """, unsafe_allow_html=True)
@@ -699,7 +678,7 @@ def create_water_intake_chart(user_records):
 def page_home():
     """Home page with introduction and user setup"""
     st.markdown("""
-    <h2 class="section-header">👋 Welcome to Your Health Journey</h2>
+    <h2 class="section-header">Welcome to Your Health Journey</h2>
     """, unsafe_allow_html=True)
     
     col1, col2 = st.columns(2, gap="large")
@@ -707,7 +686,7 @@ def page_home():
     with col1:
         st.markdown(f"""
         <div class="metric-card">
-            <h3 style="color: {theme.get_color('primary')}; margin-top: 0;">📋 How It Works</h3>
+            <h3 style="color: {theme.get_color('primary')}; margin-top: 0;">How It Works</h3>
         </div>
         """, unsafe_allow_html=True)
         
@@ -722,32 +701,32 @@ def page_home():
     with col2:
         st.markdown(f"""
         <div class="metric-card">
-            <h3 style="color: {theme.get_color('secondary')}; margin-top: 0;">✨ Key Features</h3>
+            <h3 style="color: {theme.get_color('secondary')}; margin-top: 0;">Key Features</h3>
         </div>
         """, unsafe_allow_html=True)
         
         features = [
-            ("📊", "Real-time Health Monitoring"),
-            ("📈", "Progress Tracking & Analytics"),
-            ("🤖", "AI-Powered Personalization"),
-            ("⚡", "Instant Health Insights"),
-            ("🏆", "Achievement & Goal Tracking"),
+            "Real-time Health Monitoring",
+            "Progress Tracking & Analytics",
+            "AI-Powered Personalization",
+            "Instant Health Insights",
+            "Achievement & Goal Tracking",
         ]
         
-        for icon, feature in features:
-            st.write(f"{icon} **{feature}**")
+        for feature in features:
+            st.write(f"• **{feature}**")
     
     st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
     
     st.markdown(f"""
-    <h3 style="color: {theme.get_color('primary')}; margin-bottom: 20px;">🚀 Get Started Today</h3>
+    <h3 style="color: {theme.get_color('primary')}; margin-bottom: 20px;">Get Started Today</h3>
     """, unsafe_allow_html=True)
     
     col1, col2, col3 = st.columns([2, 1, 1], gap="medium")
     
     with col1:
         user_id = st.text_input(
-            "👤 Create Your User ID",
+            "Create User ID",
             placeholder="e.g., john_doe, user_001",
             label_visibility="collapsed"
         )
@@ -773,7 +752,7 @@ def page_home():
     if st.session_state.user_id:
         st.markdown(f"""
         <div class="info-box">
-            ✅ <strong>You're logged in as:</strong> <code>{st.session_state.user_id}</code>
+            <strong>Connected as:</strong> <code>{st.session_state.user_id}</code>
         </div>
         """, unsafe_allow_html=True)
 
@@ -783,7 +762,7 @@ def page_home():
 def page_input_health_data():
     """Page for inputting health data with enhanced UI"""
     st.markdown("""
-    <h2 class="section-header">📥 Update Your Health Data</h2>
+    <h2 class="section-header">Update Your Health Data</h2>
     """, unsafe_allow_html=True)
     
     if not st.session_state.user_id:
@@ -792,23 +771,23 @@ def page_input_health_data():
     
     st.markdown(f"""
     <div class="info-box">
-        👤 <strong>User ID:</strong> <code>{st.session_state.user_id}</code>
+        <strong>User ID:</strong> <code>{st.session_state.user_id}</code>
     </div>
     """, unsafe_allow_html=True)
     
     # Create tabs for different data input sections
-    tab1, tab2 = st.tabs(["👤 Basic Information", "📊 Daily Metrics"])
+    tab1, tab2 = st.tabs(["Basic Information", "Daily Metrics"])
     
     with tab1:
         st.markdown("""
-        <h3 style="color: #2E7D32; margin-bottom: 20px;">📋 Your Basic Health Profile</h3>
+        <h3 style="color: #2E7D32; margin-bottom: 20px;">Your Basic Health Profile</h3>
         """, unsafe_allow_html=True)
         
         col1, col2 = st.columns(2, gap="medium")
         
         with col1:
             age = st.number_input(
-                "📅 Age (years)",
+                "Age (years)",
                 min_value=1,
                 max_value=150,
                 value=30,
@@ -816,7 +795,7 @@ def page_input_health_data():
                 key="age_input"
             )
             height = st.number_input(
-                "📏 Height (cm)",
+                "Height (cm)",
                 min_value=30,
                 max_value=300,
                 value=175,
@@ -826,12 +805,12 @@ def page_input_health_data():
             
         with col2:
             gender = st.selectbox(
-                "👥 Gender",
+                "Gender",
                 ["Male", "Female", "Other", "Prefer not to say"],
                 key="gender_input"
             )
             weight = st.number_input(
-                "⚖️ Weight (kg)",
+                "Weight (kg)",
                 min_value=1.0,
                 max_value=300.0,
                 value=75.0,
@@ -840,7 +819,7 @@ def page_input_health_data():
             )
         
         medical_conditions = st.text_area(
-            "🏥 Medical Conditions (if any)",
+            "Medical Conditions (if any)",
             placeholder="Enter any chronic conditions, allergies, or health concerns...",
             height=100,
             key="medical_conditions_input"
@@ -856,14 +835,14 @@ def page_input_health_data():
     
     with tab2:
         st.markdown(f"""
-        <h3 style="color: {theme.get_color('secondary')}; margin-bottom: 20px;">📈 Track Your Daily Activity</h3>
+        <h3 style="color: {theme.get_color('secondary')}; margin-bottom: 20px;">Track Your Daily Activity</h3>
         """, unsafe_allow_html=True)
         
         col1, col2, col3 = st.columns(3, gap="medium")
         
         with col1:
             daily_steps = st.number_input(
-                "👟 Daily Steps",
+                "Daily Steps",
                 min_value=0,
                 max_value=100000,
                 value=5000,
@@ -873,7 +852,7 @@ def page_input_health_data():
         
         with col2:
             sleep_hours = st.number_input(
-                "😴 Sleep Hours",
+                "Sleep Hours",
                 min_value=0.0,
                 max_value=24.0,
                 value=7.0,
@@ -883,7 +862,7 @@ def page_input_health_data():
         
         with col3:
             water_intake = st.number_input(
-                "💧 Water Intake (liters)",
+                "Water Intake (liters)",
                 min_value=0.0,
                 max_value=20.0,
                 value=2.0,
@@ -917,7 +896,7 @@ def page_input_health_data():
     col1, col2, col3 = st.columns(3, gap="medium")
     
     with col1:
-        if st.button("💾 Save Health Data", use_container_width=True, type="primary"):
+        if st.button("Save Health Data", use_container_width=True, type="primary"):
             # Validate data
             is_valid, error, _ = st.session_state.collector.collect_userinfo(
                 user_info["age"],
@@ -953,20 +932,20 @@ def page_input_health_data():
                 
                 # Save to storage
                 if st.session_state.storage.add_health_record(st.session_state.user_id, health_record):
-                    st.success("✅ Health data saved successfully!", icon="✅")
+                    st.success("Health data saved successfully!")
                     st.balloons()
                 else:
-                    st.error("❌ Error saving health data", icon="❌")
+                    st.error("Error saving health data")
             else:
-                st.error(f"❌ Validation Error: {error}", icon="❌")
+                st.error(f"Validation Error: {error}")
     
     with col2:
-        if st.button("📊 View Summary", use_container_width=True):
+        if st.button("View Summary", use_container_width=True):
             st.session_state.current_page = "Health Summary"
             st.rerun()
     
     with col3:
-        if st.button("💡 Get Recommendations", use_container_width=True):
+        if st.button("Get Recommendations", use_container_width=True):
             st.session_state.current_page = "Recommendations"
             st.rerun()
 
@@ -976,7 +955,7 @@ def page_input_health_data():
 def page_health_summary():
     """Page displaying comprehensive health summary with visualizations"""
     st.markdown("""
-    <h2 class="section-header">📊 Your Health Dashboard</h2>
+    <h2 class="section-header">Your Health Dashboard</h2>
     """, unsafe_allow_html=True)
     
     if not st.session_state.user_id:
@@ -1015,7 +994,7 @@ def page_health_summary():
     
     # ========== BASIC INFORMATION ==========
     st.markdown(f"""
-    <h3 style="color: {theme.get_color('primary')}; margin-bottom: 20px;">👤 Your Profile</h3>
+    <h3 style="color: {theme.get_color('primary')}; margin-bottom: 20px;">Your Profile</h3>
     """, unsafe_allow_html=True)
     
     col1, col2, col3, col4 = st.columns(4, gap="medium")
@@ -1040,7 +1019,7 @@ def page_health_summary():
     
     # ========== HEALTH METRICS ==========
     st.markdown(f"""
-    <h3 style="color: {theme.get_color('primary')}; margin-bottom: 20px;">📈 Health Metrics</h3>
+    <h3 style="color: {theme.get_color('primary')}; margin-bottom: 20px;">Health Metrics</h3>
     """, unsafe_allow_html=True)
     
     metric_col1, metric_col2, metric_col3 = st.columns(3, gap="large")
@@ -1050,16 +1029,14 @@ def page_health_summary():
             "BMI",
             f"{profile['bmi']}",
             "",
-            profile['bmi_category'],
-            "⚖️"
+            profile['bmi_category']
         ), unsafe_allow_html=True)
         
         st.markdown(create_metric_card(
             "Avg Daily Steps",
             f"{int(profile['average_steps']):,}",
             "steps",
-            "Good" if profile['activity_level'] in ["Good", "Excellent"] else "Needs Work",
-            "👟"
+            "Good" if profile['activity_level'] in ["Good", "Excellent"] else "Needs Work"
         ), unsafe_allow_html=True)
     
     with metric_col2:
@@ -1067,16 +1044,14 @@ def page_health_summary():
             "Sleep Average",
             f"{profile['average_sleep_hours']}",
             "hours",
-            profile['sleep_category'],
-            "😴"
+            profile['sleep_category']
         ), unsafe_allow_html=True)
         
         st.markdown(create_metric_card(
             "Days Tracked",
             f"{profile['days_tracked']}",
             "days",
-            "Excellent",
-            "📅"
+            "Excellent"
         ), unsafe_allow_html=True)
     
     with metric_col3:
@@ -1084,23 +1059,21 @@ def page_health_summary():
             "Water Intake",
             f"{profile['average_water_intake']}",
             "liters",
-            profile['hydration_level'],
-            "💧"
+            profile['hydration_level']
         ), unsafe_allow_html=True)
         
         st.markdown(create_metric_card(
             "Activity Level",
             profile['activity_level'],
             "",
-            "Good",
-            "🏃"
+            "Good"
         ), unsafe_allow_html=True)
     
     st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
     
     # ========== CHARTS & VISUALIZATIONS ==========
     st.markdown("""
-    <h3 style="color: #2E7D32; margin-bottom: 20px;">📊 Trends & Analysis</h3>
+    <h3 style="color: #2E7D32; margin-bottom: 20px;">Trends & Analysis</h3>
     """, unsafe_allow_html=True)
     
     chart_col1, chart_col2 = st.columns(2, gap="medium")
@@ -1155,7 +1128,7 @@ def page_health_summary():
             st.session_state.current_page = "Input Health Data"
             st.rerun()
     with col2:
-        if st.button("💡 Get Recommendations", use_container_width=True):
+        if st.button("Get Recommendations", use_container_width=True):
             st.session_state.current_page = "Recommendations"
             st.rerun()
     with col3:
@@ -1169,7 +1142,7 @@ def page_health_summary():
 def page_recommendations():
     """Page displaying personalized recommendations with enhanced UI"""
     st.markdown("""
-    <h2 class="section-header">💡 Personalized Health Recommendations</h2>
+    <h2 class="section-header">Personalized Health Recommendations</h2>
     """, unsafe_allow_html=True)
     
     if not st.session_state.user_id:
@@ -1217,7 +1190,7 @@ def page_recommendations():
     
     with tab1:
         st.markdown(f"""
-        <h3 style="color: {theme.get_color('primary')}; margin-bottom: 20px;">🏃 Exercise & Activity Recommendations</h3>
+        <h3 style="color: {theme.get_color('primary')}; margin-bottom: 20px;">Exercise & Activity Recommendations</h3>
         """, unsafe_allow_html=True)
         st.markdown(f"**Your Activity Level:** `{profile['activity_level']}`", unsafe_allow_html=True)
         st.markdown(f"**Average Daily Steps:** `{int(profile['average_steps']):,} steps`", unsafe_allow_html=True)
@@ -1231,7 +1204,7 @@ def page_recommendations():
     
     with tab2:
         st.markdown(f"""
-        <h3 style="color: {theme.get_color('primary')}; margin-bottom: 20px;">🥗 Diet & Nutrition Recommendations</h3>
+        <h3 style="color: {theme.get_color('primary')}; margin-bottom: 20px;">Diet & Nutrition Recommendations</h3>
         """, unsafe_allow_html=True)
         st.markdown(f"**BMI Category:** `{profile['bmi_category']}`", unsafe_allow_html=True)
         st.markdown(f"**Your BMI:** `{profile['bmi']}`", unsafe_allow_html=True)
@@ -1245,7 +1218,7 @@ def page_recommendations():
     
     with tab3:
         st.markdown(f"""
-        <h3 style="color: {theme.get_color('primary')}; margin-bottom: 20px;">😴 Sleep Recommendations</h3>
+        <h3 style="color: {theme.get_color('primary')}; margin-bottom: 20px;">Sleep Recommendations</h3>
         """, unsafe_allow_html=True)
         st.markdown(f"**Sleep Category:** `{profile['sleep_category']}`", unsafe_allow_html=True)
         st.markdown(f"**Average Sleep:** `{profile['average_sleep_hours']} hours`", unsafe_allow_html=True)
@@ -1259,7 +1232,7 @@ def page_recommendations():
     
     with tab4:
         st.markdown(f"""
-        <h3 style="color: {theme.get_color('primary')}; margin-bottom: 20px;">💧 Hydration Recommendations</h3>
+        <h3 style="color: {theme.get_color('primary')}; margin-bottom: 20px;">Hydration Recommendations</h3>
         """, unsafe_allow_html=True)
         st.markdown(f"**Hydration Level:** `{profile['hydration_level']}`", unsafe_allow_html=True)
         st.markdown(f"**Average Water Intake:** `{profile['average_water_intake']} liters`", unsafe_allow_html=True)
@@ -1312,7 +1285,7 @@ def page_recommendations():
 def page_data_management():
     """Page for managing user data with enhanced UI"""
     st.markdown("""
-    <h2 class="section-header">⚙️ Data Management</h2>
+    <h2 class="section-header">Data Management</h2>
     """, unsafe_allow_html=True)
     
     st.markdown(f"""
@@ -1338,17 +1311,17 @@ def page_data_management():
                     with st.expander(f"Record {i} - {record.get('timestamp', 'N/A')[:10]}"):
                         st.json(record.get("data", record))
             else:
-                st.info(f"ℹ️ No records found for {user_id_to_manage}")
+                st.info(f"No records found for {user_id_to_manage}")
         
         elif action == "Delete Data":
-            st.warning(f"⚠️ You are about to delete all data for {user_id_to_manage}")
+            st.warning(f"You are about to delete all data for {user_id_to_manage}")
             col_delete, col_cancel = st.columns(2)
             with col_delete:
-                if st.button("🗑️ Confirm Delete (This cannot be undone)", type="secondary"):
+                if st.button("Confirm Delete (This cannot be undone)", type="secondary"):
                     if st.session_state.storage.delete_user_data(user_id_to_manage):
-                        st.success(f"✅ All data for {user_id_to_manage} has been deleted")
+                        st.success(f"All data for {user_id_to_manage} has been deleted")
                     else:
-                        st.error("❌ Error deleting data")
+                        st.error("Error deleting data")
 
 
 
@@ -1367,16 +1340,16 @@ def main():
     with st.sidebar:
         st.markdown("""
         <div class="sidebar-container">
-            <h3 style="margin-top: 0;">🧭 Navigation</h3>
+            <h3 style="margin-top: 0;">Navigation</h3>
         </div>
         """, unsafe_allow_html=True)
         
         pages = {
-            "🏠 Home": "Home",
-            "📥 Input Health Data": "Input Health Data",
-            "📊 Health Summary": "Health Summary",
-            "💡 Recommendations": "Recommendations",
-            "⚙️ Data Management": "Data Management"
+            "Home": "Home",
+            "Input Health Data": "Input Health Data",
+            "Health Summary": "Health Summary",
+            "Recommendations": "Recommendations",
+            "Data Management": "Data Management"
         }
         
         for page_name, page_key in pages.items():
@@ -1390,12 +1363,12 @@ def main():
         if st.session_state.user_id:
             st.markdown(f"""
             <div class="user-info">
-                <strong>👤 Current User</strong><br/>
+                <strong>Current User</strong><br/>
                 <code style="color: {theme.get_color('warning')}; font-weight: bold;">{st.session_state.user_id}</code>
             </div>
             """, unsafe_allow_html=True)
             
-            if st.button("🚪 Logout", use_container_width=True):
+            if st.button("Logout", use_container_width=True):
                 st.session_state.user_id = None
                 st.session_state.current_page = "Home"
                 st.rerun()
