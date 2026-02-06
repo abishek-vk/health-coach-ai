@@ -224,6 +224,34 @@
       },
       "created_at": "2026-02-06T21:55:56.391926",
       "last_updated": "2026-02-06T21:55:56.391926"
+    },
+    {
+      "user_id": "abivk",
+      "data": {
+        "age": 30,
+        "gender": "Male",
+        "height_cm": 175,
+        "weight_kg": 75.0,
+        "medical_conditions": "None",
+        "average_steps": 5300.0,
+        "average_sleep_hours": 6.62,
+        "average_water_intake": 1.82,
+        "steps_std_dev": 346.0,
+        "sleep_std_dev": 1.89,
+        "water_std_dev": 0.57,
+        "total_records": 4,
+        "days_tracked": 4,
+        "bmi": 24.49,
+        "bmi_category": "Normal Weight",
+        "activity_level": "Lightly Active",
+        "sleep_category": "Below Optimal",
+        "hydration_level": "Below Recommended",
+        "health_risks": [
+          "Hydration: Below Recommended - Increase water intake"
+        ]
+      },
+      "created_at": "2026-02-06T22:00:35.043540",
+      "last_updated": "2026-02-06T22:07:30.596975"
     }
   ]
 }

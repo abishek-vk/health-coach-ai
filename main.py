@@ -812,33 +812,38 @@ def page_input_health_data():
                 min_value=1,
                 max_value=150,
                 value=30,
-                step=1
+                step=1,
+                key="age_input"
             )
             height = st.number_input(
                 "📏 Height (cm)",
                 min_value=30,
                 max_value=300,
                 value=175,
-                step=1
+                step=1,
+                key="height_input"
             )
             
         with col2:
             gender = st.selectbox(
                 "👥 Gender",
-                ["Male", "Female", "Other", "Prefer not to say"]
+                ["Male", "Female", "Other", "Prefer not to say"],
+                key="gender_input"
             )
             weight = st.number_input(
                 "⚖️ Weight (kg)",
                 min_value=1.0,
                 max_value=300.0,
                 value=75.0,
-                step=0.5
+                step=0.5,
+                key="weight_input"
             )
         
         medical_conditions = st.text_area(
             "🏥 Medical Conditions (if any)",
             placeholder="Enter any chronic conditions, allergies, or health concerns...",
-            height=100
+            height=100,
+            key="medical_conditions_input"
         )
         
         user_info = {
@@ -862,7 +867,8 @@ def page_input_health_data():
                 min_value=0,
                 max_value=100000,
                 value=5000,
-                step=100
+                step=100,
+                key="daily_steps_input"
             )
         
         with col2:
@@ -871,7 +877,8 @@ def page_input_health_data():
                 min_value=0.0,
                 max_value=24.0,
                 value=7.0,
-                step=0.5
+                step=0.5,
+                key="sleep_hours_input"
             )
         
         with col3:
@@ -880,7 +887,8 @@ def page_input_health_data():
                 min_value=0.0,
                 max_value=20.0,
                 value=2.0,
-                step=0.1
+                step=0.1,
+                key="water_intake_input"
             )
         
         # Progress indicators
