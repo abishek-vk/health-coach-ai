@@ -587,6 +587,20 @@
         "sleep_hours": 4.0,
         "water_intake_liters": 0.9999999999999992
       }
+    },
+    {
+      "user_id": "abbb",
+      "timestamp": "2026-02-06T22:50:56.210038",
+      "data": {
+        "age": 30,
+        "gender": "Male",
+        "height_cm": 175,
+        "weight_kg": 75.0,
+        "medical_conditions": "None",
+        "daily_steps": 5000,
+        "sleep_hours": 7.0,
+        "water_intake_liters": 2.0
+      }
     }
   ]
 }

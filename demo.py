@@ -195,27 +195,27 @@ def demo_recommendation_generation(profile):
     recommendations = RecommendationEngine.generate_comprehensive_recommendations(profile)
     
     # Display Exercise Recommendations
-    print_subsection("🏃 EXERCISE RECOMMENDATIONS")
+    print_subsection("EXERCISE RECOMMENDATIONS")
     for rec in recommendations["exercise"]:
         print(f"  {rec}")
     
     # Display Diet Recommendations
-    print_subsection("🥗 DIET RECOMMENDATIONS")
+    print_subsection("DIET RECOMMENDATIONS")
     for rec in recommendations["diet"]:
         print(f"  {rec}")
     
     # Display Sleep Recommendations
-    print_subsection("😴 SLEEP RECOMMENDATIONS")
+    print_subsection("SLEEP RECOMMENDATIONS")
     for rec in recommendations["sleep"]:
         print(f"  {rec}")
     
     # Display Hydration Recommendations
-    print_subsection("💧 HYDRATION RECOMMENDATIONS")
+    print_subsection("HYDRATION RECOMMENDATIONS")
     for rec in recommendations["hydration"]:
         print(f"  {rec}")
     
     # Display Health Alerts
-    print_subsection("⚠️ HEALTH ALERTS & RISK INDICATORS")
+    print_subsection("HEALTH ALERTS & RISK INDICATORS")
     for alert in recommendations["health_alerts"]:
         print(f"  {alert}")
     
