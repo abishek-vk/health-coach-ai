@@ -820,9 +820,9 @@ def page_input_health_data():
             )
             weight = st.number_input(
                 "⚖️ Weight (kg)",
-                min_value=1,
-                max_value=300,
-                value=75,
+                min_value=1.0,
+                max_value=300.0,
+                value=75.0,
                 step=0.5
             )
         

@@ -3,6 +3,7 @@ level = "error"
 
 [client]
 showErrorDetails = false
+toolbarMode = "minimal"
 
 [browser]
 serverAddress = "localhost"
