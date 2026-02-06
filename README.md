@@ -7,21 +7,21 @@ A fully functional AI-powered personal health coach system built with Python, fe
 ### ✨ Core Features
 - **📥 Health Data Collection**: Age, gender, height, weight, medical conditions, daily steps, sleep hours, water intake
 - **💾 JSON-Based Storage**: Lightweight file storage without database dependencies
-- **📊 Data Compression**: Automatically compresses historical records into compact health profiles
-- **📈 Health Analysis**: BMI calculation, activity level assessment, sleep quality analysis, hydration tracking
-- **🤖 Intelligent Recommendations**: Personalized exercise, diet, sleep, and hydration suggestions
-- **⚠️ Health Risk Detection**: Identifies potential health risks and early warning indicators
+- **Data Compression**: Automatically compresses historical records into compact health profiles
+- **Health Analysis**: BMI calculation, activity level assessment, sleep quality analysis, hydration tracking
+- **Intelligent Recommendations**: Personalized exercise, diet, sleep, and hydration suggestions
+- **Health Risk Detection**: Identifies potential health risks and early warning indicators
 - **📱 Interactive Dashboard**: Streamlit web interface for easy data entry and visualization
 - **🔍 Data Visualization**: Charts and trends for historical health data
 
-### 🏗️ Architecture
+### Architecture
 - **Modular Design**: 5 independent, reusable modules
 - **Clean Separation of Concerns**: Input validation, storage, summarization, and recommendations
 - **Input Validation**: Comprehensive validation for all health metrics
 - **Error Handling**: Robust error handling throughout the system
 - **Logging**: Detailed logging for debugging and monitoring
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 personal-health-coach-ai/
@@ -41,7 +41,7 @@ personal-health-coach-ai/
     └── user_profiles.json        # Compressed health profiles
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 - Python 3.8 or higher
@@ -84,7 +84,7 @@ python demo.py
 ```
 This shows a complete end-to-end demonstration of the system in the console.
 
-## 📖 Usage Guide
+## Usage Guide
 
 ### Using the Streamlit Dashboard
 
@@ -118,11 +118,11 @@ This shows a complete end-to-end demonstration of the system in the console.
 
 #### 4. **Recommendations**
 - Get personalized recommendations for:
-  - 🏃 **Exercise**: Based on activity level
-  - 🥗 **Diet**: Based on BMI and health metrics
-  - 😴 **Sleep**: Based on sleep patterns
-  - 💧 **Hydration**: Based on water intake
-  - ⚠️ **Health Alerts**: Risk warnings and indicators
+  - **Exercise**: Based on activity level
+  - **Diet**: Based on BMI and health metrics
+  - **Sleep**: Based on sleep patterns
+  - **Hydration**: Based on water intake
+  - **Health Alerts**: Risk warnings and indicators
 
 #### 5. **Data Management**
 - View all records for a user
