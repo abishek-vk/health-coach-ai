@@ -305,7 +305,7 @@ profile = {
 # Identify risks
 risks = HealthProfileSummarizer.identify_health_risks(profile)
 for risk in risks:
-    print(f"{risk}")
+    print(f"⚠️ {risk}")
 ```
 
 ### Example 6: Compress Historical Records
@@ -348,7 +348,7 @@ profile = {
 }
 
 exercise_recs = RecommendationEngine.generate_exercise_recommendations(profile)
-print("Exercise Recommendations:")
+print("🏃 Exercise Recommendations:")
 for rec in exercise_recs:
     print(f"  {rec}")
 ```
@@ -365,7 +365,7 @@ profile = {
 }
 
 diet_recs = RecommendationEngine.generate_diet_recommendations(profile)
-print("Diet Recommendations:")
+print("🥗 Diet Recommendations:")
 for rec in diet_recs:
     print(f"  {rec}")
 ```
@@ -382,7 +382,7 @@ profile = {
 }
 
 sleep_recs = RecommendationEngine.generate_sleep_recommendations(profile)
-print("Sleep Recommendations:")
+print("😴 Sleep Recommendations:")
 for rec in sleep_recs:
     print(f"  {rec}")
 ```
@@ -398,7 +398,7 @@ profile = {
 }
 
 hydration_recs = RecommendationEngine.generate_hydration_reminders(profile)
-print("Hydration Recommendations:")
+print("💧 Hydration Recommendations:")
 for rec in hydration_recs:
     print(f"  {rec}")
 ```
@@ -415,7 +415,7 @@ profile = {
 }
 
 alerts = RecommendationEngine.generate_health_alerts(profile)
-print("Health Alerts:")
+print("⚠️ Health Alerts:")
 for alert in alerts:
     print(f"  {alert}")
 ```
@@ -584,7 +584,7 @@ print(f"\nActivity trend: {improvement:+.1f}% change in steps")
 if improvement > 0:
     print("✅ You're becoming more active!")
 elif improvement < 0:
-    print("Your activity level has decreased")
+    print("⚠️ Your activity level has decreased")
 else:
     print("➡️ Your activity level is stable")
 ```
@@ -665,7 +665,7 @@ try:
     )
     
     if not is_valid:
-        print(f"Validation error: {error}")
+        print(f"⚠️ Validation error: {error}")
     else:
         # Process valid data
         print("✅ Data is valid")

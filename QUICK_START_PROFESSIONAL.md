@@ -93,11 +93,11 @@ If it doesn't open automatically, visit: **http://localhost:8501**
 
 #### Recommendations
 - **Five recommendation tabs**:
-  - Exercise & Activity
-  - Diet & Nutrition
-  - Sleep Optimization
-  - Hydration Guidance
-  - Health Alerts
+  - 🏃 Exercise & Activity
+  - 🥗 Diet & Nutrition
+  - 😴 Sleep Optimization
+  - 💧 Hydration Guidance
+  - ⚠️ Health Alerts
 - Numbered recommendations in beautiful cards
 - Color-coded alerts (green for good, orange for warning, red for risk)
 

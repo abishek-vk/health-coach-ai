@@ -277,9 +277,9 @@ rm data/user_profiles.json
 ### Check Logs
 
 The system logs to console. Look for messages like:
-- Success messages (green text)
-- Warnings (yellow text)
-- Errors (red text)
+- ✅ Success messages (green text)
+- ⚠️ Warnings (yellow text)
+- ❌ Errors (red text)
 
 ### Debug Mode
 
