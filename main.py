@@ -1,6 +1,7 @@
 """
 main.py - Professional Streamlit Dashboard for Personal Health Coach AI
 Interactive web interface with modern UI, charts, and data management
+Theme-aware UI that automatically adapts to light/dark mode
 """
 
 import streamlit as st
@@ -19,6 +20,82 @@ from modules.recommendation_engine import RecommendationEngine
 
 
 # ============================================================================
+# THEME MANAGEMENT SYSTEM
+# ============================================================================
+class ThemeManager:
+    """Manages theme-aware colors and styling based on Streamlit's active theme"""
+    
+    def __init__(self):
+        self.is_dark_mode = self._detect_theme()
+        self.colors = self._get_color_palette()
+    
+    def _detect_theme(self):
+        """Detect if dark mode is active in Streamlit"""
+        try:
+            return st.get_option("theme.base") == "dark"
+        except:
+            return False
+    
+    def _get_color_palette(self):
+        """Return color palette based on current theme"""
+        if self.is_dark_mode:
+            return {
+                "primary": "#4CAF50",
+                "secondary": "#42A5F5",
+                "accent": "#FF9800",
+                "success": "#66BB6A",
+                "warning": "#FDD835",
+                "danger": "#EF5350",
+                "bg_main": "#0E1117",
+                "bg_secondary": "#262730",
+                "bg_tertiary": "#3D3D4D",
+                "text_primary": "#ECDDC8",
+                "text_secondary": "#B0B0B0",
+                "border": "#3D3D4D",
+                "shadow": "rgba(0,0,0,0.5)",
+                "chart_bg": "#1a1a2e",
+                "card_hover": "#4a4a5e",
+            }
+        else:
+            return {
+                "primary": "#2E7D32",
+                "secondary": "#1976D2",
+                "accent": "#F57C00",
+                "success": "#388E3C",
+                "warning": "#FBC02D",
+                "danger": "#D32F2F",
+                "bg_main": "#F5F7FA",
+                "bg_secondary": "#FFFFFF",
+                "bg_tertiary": "#F5F5F5",
+                "text_primary": "#212121",
+                "text_secondary": "#757575",
+                "border": "#E0E0E0",
+                "shadow": "rgba(0,0,0,0.1)",
+                "chart_bg": "#FFFFFF",
+                "card_hover": "#F0F0F0",
+            }
+    
+    def get_color(self, color_name):
+        """Get a specific color from the palette"""
+        return self.colors.get(color_name, "#000000")
+    
+    def get_plotly_template(self):
+        """Get appropriate Plotly template based on theme"""
+        return "plotly_dark" if self.is_dark_mode else "plotly"
+    
+    def apply_theme_to_plotly(self, fig):
+        """Apply theme colors to Plotly figures"""
+        fig.update_layout(
+            template=self.get_plotly_template(),
+            paper_bgcolor=self.get_color("bg_secondary"),
+            plot_bgcolor=self.get_color("chart_bg"),
+            font=dict(color=self.get_color("text_primary")),
+            margin=dict(l=50, r=50, t=50, b=50),
+        )
+        return fig
+
+
+# ============================================================================
 # PAGE CONFIGURATION
 # ============================================================================
 st.set_page_config(
@@ -31,131 +108,123 @@ st.set_page_config(
     }
 )
 
+# Initialize theme manager
+theme = ThemeManager()
+
 # ============================================================================
-# PROFESSIONAL CSS STYLING WITH THEME AWARENESS
+# DYNAMIC CSS STYLING - THEME AWARE
 # ============================================================================
-st.markdown("""
-    <style>
-    /* Root Colors - Light Theme (Default) */
-    :root {
-        --primary-color: #2E7D32;
-        --secondary-color: #1976D2;
-        --accent-color: #F57C00;
-        --success-color: #388E3C;
-        --warning-color: #FBC02D;
-        --danger-color: #D32F2F;
-        --light-bg: #F5F7FA;
-        --card-bg: #FFFFFF;
-        --text-primary: #212121;
-        --text-secondary: #757575;
-        --border-color: #E0E0E0;
-        --shadow-color: rgba(0,0,0,0.1);
-    }
+def generate_theme_css(theme):
+    """Generate CSS dynamically based on current theme"""
+    colors = theme.colors
     
-    /* Dark Theme */
-    @media (prefers-color-scheme: dark) {
-        :root {
-            --primary-color: #4CAF50;
-            --secondary-color: #42A5F5;
-            --accent-color: #FF9800;
-            --success-color: #66BB6A;
-            --warning-color: #FDD835;
-            --danger-color: #EF5350;
-            --light-bg: #1E1E2E;
-            --card-bg: #2D2D3D;
-            --text-primary: #E0E0E0;
-            --text-secondary: #B0B0B0;
-            --border-color: #3D3D4D;
-            --shadow-color: rgba(0,0,0,0.3);
-        }
-    }
+    css = f"""
+    <style>
+    /* Root Colors - Dynamically set based on theme */
+    :root {{
+        --primary-color: {colors['primary']};
+        --secondary-color: {colors['secondary']};
+        --accent-color: {colors['accent']};
+        --success-color: {colors['success']};
+        --warning-color: {colors['warning']};
+        --danger-color: {colors['danger']};
+        --light-bg: {colors['bg_main']};
+        --card-bg: {colors['bg_secondary']};
+        --text-primary: {colors['text_primary']};
+        --text-secondary: {colors['text_secondary']};
+        --border-color: {colors['border']};
+        --shadow-color: {colors['shadow']};
+    }}
     
     /* Main Container */
-    .main {
-        background-color: var(--light-bg);
-    }
+    .main {{
+        background-color: {colors['bg_main']};
+        color: {colors['text_primary']};
+    }}
     
     /* Professional Header */
-    .header-container {
-        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    .header-container {{
+        background: linear-gradient(135deg, {colors['primary']} 0%, {colors['secondary']} 100%);
         padding: 40px 20px;
         border-radius: 12px;
         color: white;
         margin-bottom: 30px;
-        box-shadow: 0 4px 15px var(--shadow-color);
+        box-shadow: 0 4px 15px {colors['shadow']};
         transition: all 0.3s ease;
-    }
+    }}
     
-    .header-title {
+    .header-title {{
         font-size: 3.5rem;
         font-weight: 700;
         margin: 0;
         color: white;
-        text-shadow: 0 2px 4px var(--shadow-color);
-    }
+        text-shadow: 0 2px 4px {colors['shadow']};
+    }}
     
-    .header-subtitle {
+    .header-subtitle {{
         font-size: 1.1rem;
         font-weight: 300;
         margin-top: 10px;
         opacity: 0.95;
         color: white;
-    }
+    }}
     
     /* Card Styling */
-    .metric-card {
-        background: var(--card-bg);
+    .metric-card {{
+        background: {colors['bg_secondary']};
         padding: 25px;
         border-radius: 12px;
         margin: 15px 0;
-        border-left: 5px solid var(--primary-color);
-        box-shadow: 0 2px 8px var(--shadow-color);
+        border-left: 5px solid {colors['primary']};
+        box-shadow: 0 2px 8px {colors['shadow']};
         transition: all 0.3s ease;
-    }
+        color: {colors['text_primary']};
+    }}
     
-    .metric-card:hover {
-        box-shadow: 0 6px 16px var(--shadow-color);
+    .metric-card:hover {{
+        box-shadow: 0 6px 16px {colors['shadow']};
         transform: translateY(-2px);
-    }
+        background-color: {colors['card_hover']};
+    }}
     
-    .metric-card-success {
-        border-left-color: var(--success-color);
-    }
+    .metric-card-success {{
+        border-left-color: {colors['success']};
+    }}
     
-    .metric-card-info {
-        border-left-color: var(--secondary-color);
-    }
+    .metric-card-info {{
+        border-left-color: {colors['secondary']};
+    }}
     
-    .metric-card-warning {
-        border-left-color: var(--accent-color);
-    }
+    .metric-card-warning {{
+        border-left-color: {colors['accent']};
+    }}
     
-    .metric-value {
+    .metric-value {{
         font-size: 2.2rem;
         font-weight: 700;
-        color: var(--primary-color);
+        color: {colors['primary']};
         margin: 10px 0;
-    }
+    }}
     
-    .metric-label {
+    .metric-label {{
         font-size: 0.95rem;
-        color: var(--text-secondary);
+        color: {colors['text_secondary']};
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 0.5px;
-    }
+    }}
     
-    .metric-unit {
+    .metric-unit {{
         font-size: 0.85rem;
-        color: var(--text-secondary);
+        color: {colors['text_secondary']};
         margin-left: 5px;
         opacity: 0.7;
-    }
+    }}
     
     /* Alert Boxes */
-    .alert-box {
-        background-color: var(--warning-color);
-        border-left: 5px solid var(--accent-color);
+    .alert-box {{
+        background-color: {colors['warning']};
+        border-left: 5px solid {colors['accent']};
         padding: 18px;
         border-radius: 8px;
         margin: 15px 0;
@@ -163,18 +232,11 @@ st.markdown("""
         font-size: 0.95rem;
         line-height: 1.6;
         transition: all 0.3s ease;
-    }
+    }}
     
-    @media (prefers-color-scheme: dark) {
-        .alert-box {
-            background-color: #3D2F1E;
-            color: #FDD835;
-        }
-    }
-    
-    .success-box {
-        background-color: var(--success-color);
-        border-left: 5px solid var(--success-color);
+    .success-box {{
+        background-color: {colors['success']};
+        border-left: 5px solid {colors['success']};
         padding: 18px;
         border-radius: 8px;
         margin: 15px 0;
@@ -183,11 +245,11 @@ st.markdown("""
         line-height: 1.6;
         transition: all 0.3s ease;
         opacity: 0.9;
-    }
+    }}
     
-    .danger-box {
-        background-color: var(--danger-color);
-        border-left: 5px solid var(--danger-color);
+    .danger-box {{
+        background-color: {colors['danger']};
+        border-left: 5px solid {colors['danger']};
         padding: 18px;
         border-radius: 8px;
         margin: 15px 0;
@@ -196,11 +258,11 @@ st.markdown("""
         line-height: 1.6;
         transition: all 0.3s ease;
         opacity: 0.9;
-    }
+    }}
     
-    .info-box {
-        background-color: var(--secondary-color);
-        border-left: 5px solid var(--secondary-color);
+    .info-box {{
+        background-color: {colors['secondary']};
+        border-left: 5px solid {colors['secondary']};
         padding: 18px;
         border-radius: 8px;
         margin: 15px 0;
@@ -209,72 +271,178 @@ st.markdown("""
         line-height: 1.6;
         transition: all 0.3s ease;
         opacity: 0.9;
-    }
+    }}
     
     /* Section Headers */
-    .section-header {
+    .section-header {{
         font-size: 1.8rem;
         font-weight: 700;
-        color: var(--primary-color);
+        color: {colors['primary']};
         margin: 30px 0 20px 0;
         padding-bottom: 15px;
-        border-bottom: 3px solid var(--primary-color);
+        border-bottom: 3px solid {colors['primary']};
         transition: all 0.3s ease;
-    }
+    }}
     
     /* Tab Styling */
-    .stTabs [data-baseweb="tab-list"] {
-        background-color: var(--light-bg);
+    .stTabs [data-baseweb="tab-list"] {{
+        background-color: {colors['bg_main']};
         border-radius: 8px;
         padding: 5px;
-    }
+    }}
     
-    .stTabs [data-baseweb="tab"] {
-        background-color: var(--card-bg);
+    .stTabs [data-baseweb="tab"] {{
+        background-color: {colors['bg_secondary']};
         border-radius: 6px;
         margin: 5px;
-        color: var(--text-primary);
+        color: {colors['text_primary']};
         transition: all 0.3s ease;
-    }
+    }}
     
     /* Buttons */
-    .stButton > button {
-        background-color: var(--primary-color) !important;
+    .stButton > button {{
+        background-color: {colors['primary']} !important;
         color: white !important;
         border: none !important;
         border-radius: 6px !important;
         transition: all 0.3s ease !important;
-    }
+    }}
     
-    .stButton > button:hover {
-        background-color: var(--secondary-color) !important;
-        box-shadow: 0 4px 12px var(--shadow-color) !important;
-    }
+    .stButton > button:hover {{
+        background-color: {colors['secondary']} !important;
+        box-shadow: 0 4px 12px {colors['shadow']} !important;
+    }}
     
     /* Text Color Adjustments */
-    p, span, label {
-        color: var(--text-primary);
+    p, span, label {{
+        color: {colors['text_primary']};
         transition: color 0.3s ease;
-    }
+    }}
     
     /* Input Fields */
     .stTextInput > div > div > input,
     .stSelectbox > div > div > select,
-    .stNumberInput > div > div > input {
-        background-color: var(--card-bg) !important;
-        color: var(--text-primary) !important;
-        border-color: var(--border-color) !important;
+    .stNumberInput > div > div > input {{
+        background-color: {colors['bg_secondary']} !important;
+        color: {colors['text_primary']} !important;
+        border-color: {colors['border']} !important;
         transition: all 0.3s ease !important;
-    }
+    }}
     
     .stTextInput > div > div > input:focus,
     .stSelectbox > div > div > select:focus,
-    .stNumberInput > div > div > input:focus {
-        border-color: var(--primary-color) !important;
-        box-shadow: 0 0 0 3px var(--primary-color)33 !important;
-    }
+    .stNumberInput > div > div > input:focus {{
+        border-color: {colors['primary']} !important;
+        box-shadow: 0 0 0 3px {colors['primary']}44 !important;
+    }}
+    
+    /* Divider */
+    .divider {{
+        margin: 30px 0;
+        border-bottom: 2px solid {colors['border']};
+    }}
+    
+    /* Progress Bar */
+    .progress-container {{
+        margin: 20px 0;
+    }}
+    
+    .progress-bar {{
+        background-color: {colors['bg_tertiary']};
+        border-radius: 10px;
+        height: 8px;
+        overflow: hidden;
+    }}
+    
+    .progress-bar-fill {{
+        background: linear-gradient(90deg, {colors['primary']}, {colors['success']});
+        height: 100%;
+        border-radius: 10px;
+        transition: width 0.3s ease;
+    }}
+    
+    /* Sidebar */
+    .sidebar-container {{
+        background: linear-gradient(180deg, {colors['primary']} 0%, {colors['secondary']} 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+    }}
+    
+    .user-info {{
+        background-color: rgba(255,255,255,0.1);
+        padding: 15px;
+        border-radius: 8px;
+        margin: 10px 0;
+        border-left: 4px solid {colors['warning']};
+    }}
+    
+    /* Badge */
+    .badge {{
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin: 5px 5px 5px 0;
+    }}
+    
+    .badge-success {{
+        background-color: {colors['success']};
+        color: white;
+    }}
+    
+    .badge-warning {{
+        background-color: {colors['warning']};
+        color: #333;
+    }}
+    
+    .badge-danger {{
+        background-color: {colors['danger']};
+        color: white;
+    }}
+    
+    .badge-info {{
+        background-color: {colors['secondary']};
+        color: white;
+    }}
+    
+    /* Footer */
+    .footer {{
+        text-align: center;
+        color: {colors['text_secondary']};
+        font-size: 0.85rem;
+        margin-top: 40px;
+        padding: 20px;
+        border-top: 1px solid {colors['border']};
+    }}
+    
+    /* Chart Container */
+    .chart-container {{
+        background-color: {colors['bg_secondary']};
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px {colors['shadow']};
+        margin: 20px 0;
+    }}
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {{
+        .header-title {{
+            font-size: 2rem;
+        }}
+        
+        .metric-card {{
+            margin: 10px 0;
+        }}
+    }}
     </style>
-""", unsafe_allow_html=True)
+    """
+    return css
+
+# Apply dynamic theme CSS
+st.markdown(generate_theme_css(theme), unsafe_allow_html=True)
 
 
 # ============================================================================
@@ -327,8 +495,12 @@ def get_badge_type(category):
 
 
 def display_professional_header():
-    """Display professional gradient header"""
-    st.markdown("""
+    """Display professional gradient header - Theme aware"""
+    primary = theme.get_color("primary")
+    secondary = theme.get_color("secondary")
+    text_color = "white"
+    
+    st.markdown(f"""
     <div class="header-container">
         <h1 class="header-title">🏥 Health Coach AI</h1>
         <p class="header-subtitle">Your Intelligent Personal Health & Wellness Companion</p>
@@ -336,8 +508,52 @@ def display_professional_header():
     """, unsafe_allow_html=True)
 
 
+def render_sidebar_styling():
+    """Generate theme-aware sidebar styling HTML"""
+    primary = theme.get_color("primary")
+    secondary = theme.get_color("secondary")
+    bg_secondary = theme.get_color("bg_secondary")
+    text_primary = theme.get_color("text_primary")
+    
+    return f"""
+    <style>
+    .sidebar-container {{
+        background: linear-gradient(180deg, {primary} 0%, {secondary} 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 12px {theme.get_color('shadow')};
+    }}
+    
+    .sidebar-container h3 {{
+        color: white;
+        margin: 0;
+    }}
+    
+    .user-info {{
+        background-color: rgba(255,255,255,0.15);
+        padding: 15px;
+        border-radius: 8px;
+        margin: 20px 0;
+        border-left: 4px solid {theme.get_color('warning')};
+        color: white;
+    }}
+    
+    .user-info strong {{
+        color: white;
+    }}
+    
+    .user-info code {{
+        color: {theme.get_color('warning')};
+        font-weight: bold;
+    }}
+    </style>
+    """
+
+
 def create_plotly_steps_chart(user_records):
-    """Create interactive Plotly chart for daily steps"""
+    """Create interactive Plotly chart for daily steps - Theme aware"""
     steps_data = []
     for record in user_records:
         data = record.get("data", record)
@@ -357,13 +573,13 @@ def create_plotly_steps_chart(user_records):
         y=df_steps["Steps"],
         mode="lines+markers",
         name="Daily Steps",
-        line=dict(color="#2E7D32", width=3),
-        marker=dict(size=8, color="#2E7D32", symbol="circle"),
+        line=dict(color=theme.get_color("primary"), width=3),
+        marker=dict(size=8, color=theme.get_color("primary"), symbol="circle"),
         fill="tozeroy",
-        fillcolor="rgba(46, 125, 50, 0.1)"
+        fillcolor=theme.get_color("primary") + "1A"
     ))
     
-    fig.add_hline(y=7000, line_dash="dash", line_color="#F57C00", 
+    fig.add_hline(y=7000, line_dash="dash", line_color=theme.get_color("accent"), 
                   annotation_text="Daily Goal", annotation_position="right")
     
     fig.update_layout(
@@ -371,17 +587,17 @@ def create_plotly_steps_chart(user_records):
         xaxis_title="Date",
         yaxis_title="Steps",
         hovermode="x unified",
-        template="plotly_white",
-        plot_bgcolor="rgba(245,247,250,0.5)",
-        paper_bgcolor="white",
         height=400
     )
+    
+    # Apply theme to the figure
+    theme.apply_theme_to_plotly(fig)
     
     return fig
 
 
 def create_plotly_sleep_chart(user_records):
-    """Create interactive Plotly chart for sleep hours"""
+    """Create interactive Plotly chart for sleep hours - Theme aware"""
     sleep_data = []
     for record in user_records:
         data = record.get("data", record)
@@ -401,13 +617,13 @@ def create_plotly_sleep_chart(user_records):
         y=df_sleep["Sleep"],
         mode="lines+markers",
         name="Sleep Hours",
-        line=dict(color="#1976D2", width=3),
-        marker=dict(size=8, color="#1976D2", symbol="circle"),
+        line=dict(color=theme.get_color("secondary"), width=3),
+        marker=dict(size=8, color=theme.get_color("secondary"), symbol="circle"),
         fill="tozeroy",
-        fillcolor="rgba(25, 118, 210, 0.1)"
+        fillcolor=theme.get_color("secondary") + "1A"
     ))
     
-    fig.add_hline(y=8, line_dash="dash", line_color="#F57C00",
+    fig.add_hline(y=8, line_dash="dash", line_color=theme.get_color("accent"),
                   annotation_text="Recommended", annotation_position="right")
     
     fig.update_layout(
@@ -415,17 +631,17 @@ def create_plotly_sleep_chart(user_records):
         xaxis_title="Date",
         yaxis_title="Hours",
         hovermode="x unified",
-        template="plotly_white",
-        plot_bgcolor="rgba(245,247,250,0.5)",
-        paper_bgcolor="white",
         height=400
     )
+    
+    # Apply theme to the figure
+    theme.apply_theme_to_plotly(fig)
     
     return fig
 
 
 def create_water_intake_chart(user_records):
-    """Create interactive Plotly chart for water intake"""
+    """Create interactive Plotly chart for water intake - Theme aware"""
     water_data = []
     for record in user_records:
         data = record.get("data", record)
@@ -445,25 +661,23 @@ def create_water_intake_chart(user_records):
         y=df_water["Water"],
         name="Water Intake",
         marker=dict(
-            color=df_water["Water"],
-            colorscale="Greens",
-            showscale=True,
-            colorbar=dict(title="Liters")
+            color=theme.get_color("success"),
+            opacity=0.8
         )
     ))
     
-    fig.add_hline(y=2, line_dash="dash", line_color="#F57C00",
+    fig.add_hline(y=2, line_dash="dash", line_color=theme.get_color("accent"),
                   annotation_text="Daily Goal", annotation_position="right")
     
     fig.update_layout(
         title="Daily Water Intake",
         xaxis_title="Date",
         yaxis_title="Liters",
-        template="plotly_white",
-        plot_bgcolor="rgba(245,247,250,0.5)",
-        paper_bgcolor="white",
         height=400
     )
+    
+    # Apply theme to the figure
+    theme.apply_theme_to_plotly(fig)
     
     return fig
 
@@ -482,9 +696,9 @@ def page_home():
     col1, col2 = st.columns(2, gap="large")
     
     with col1:
-        st.markdown("""
+        st.markdown(f"""
         <div class="metric-card">
-            <h3 style="color: #2E7D32; margin-top: 0;">📋 How It Works</h3>
+            <h3 style="color: {theme.get_color('primary')}; margin-top: 0;">📋 How It Works</h3>
         </div>
         """, unsafe_allow_html=True)
         
@@ -497,9 +711,9 @@ def page_home():
         """)
     
     with col2:
-        st.markdown("""
+        st.markdown(f"""
         <div class="metric-card">
-            <h3 style="color: #1976D2; margin-top: 0;">✨ Key Features</h3>
+            <h3 style="color: {theme.get_color('secondary')}; margin-top: 0;">✨ Key Features</h3>
         </div>
         """, unsafe_allow_html=True)
         
@@ -516,8 +730,8 @@ def page_home():
     
     st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
     
-    st.markdown("""
-    <h3 style="color: #2E7D32; margin-bottom: 20px;">🚀 Get Started Today</h3>
+    st.markdown(f"""
+    <h3 style="color: {theme.get_color('primary')}; margin-bottom: 20px;">🚀 Get Started Today</h3>
     """, unsafe_allow_html=True)
     
     col1, col2, col3 = st.columns([2, 1, 1], gap="medium")
@@ -627,8 +841,8 @@ def page_input_health_data():
         }
     
     with tab2:
-        st.markdown("""
-        <h3 style="color: #1976D2; margin-bottom: 20px;">📈 Track Your Daily Activity</h3>
+        st.markdown(f"""
+        <h3 style="color: {theme.get_color('secondary')}; margin-bottom: 20px;">📈 Track Your Daily Activity</h3>
         """, unsafe_allow_html=True)
         
         col1, col2, col3 = st.columns(3, gap="medium")
@@ -783,8 +997,8 @@ def page_health_summary():
     st.session_state.storage.save_user_profile(st.session_state.user_id, profile)
     
     # ========== BASIC INFORMATION ==========
-    st.markdown("""
-    <h3 style="color: #2E7D32; margin-bottom: 20px;">👤 Your Profile</h3>
+    st.markdown(f"""
+    <h3 style="color: {theme.get_color('primary')}; margin-bottom: 20px;">👤 Your Profile</h3>
     """, unsafe_allow_html=True)
     
     col1, col2, col3, col4 = st.columns(4, gap="medium")
@@ -808,8 +1022,8 @@ def page_health_summary():
     st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
     
     # ========== HEALTH METRICS ==========
-    st.markdown("""
-    <h3 style="color: #2E7D32; margin-bottom: 20px;">📈 Health Metrics</h3>
+    st.markdown(f"""
+    <h3 style="color: {theme.get_color('primary')}; margin-bottom: 20px;">📈 Health Metrics</h3>
     """, unsafe_allow_html=True)
     
     metric_col1, metric_col2, metric_col3 = st.columns(3, gap="large")
@@ -985,8 +1199,8 @@ def page_recommendations():
     ])
     
     with tab1:
-        st.markdown("""
-        <h3 style="color: #2E7D32; margin-bottom: 20px;">🏃 Exercise & Activity Recommendations</h3>
+        st.markdown(f"""
+        <h3 style="color: {theme.get_color('primary')}; margin-bottom: 20px;">🏃 Exercise & Activity Recommendations</h3>
         """, unsafe_allow_html=True)
         st.markdown(f"**Your Activity Level:** `{profile['activity_level']}`", unsafe_allow_html=True)
         st.markdown(f"**Average Daily Steps:** `{int(profile['average_steps']):,} steps`", unsafe_allow_html=True)
@@ -999,8 +1213,8 @@ def page_recommendations():
             """, unsafe_allow_html=True)
     
     with tab2:
-        st.markdown("""
-        <h3 style="color: #2E7D32; margin-bottom: 20px;">🥗 Diet & Nutrition Recommendations</h3>
+        st.markdown(f"""
+        <h3 style="color: {theme.get_color('primary')}; margin-bottom: 20px;">🥗 Diet & Nutrition Recommendations</h3>
         """, unsafe_allow_html=True)
         st.markdown(f"**BMI Category:** `{profile['bmi_category']}`", unsafe_allow_html=True)
         st.markdown(f"**Your BMI:** `{profile['bmi']}`", unsafe_allow_html=True)
@@ -1013,8 +1227,8 @@ def page_recommendations():
             """, unsafe_allow_html=True)
     
     with tab3:
-        st.markdown("""
-        <h3 style="color: #2E7D32; margin-bottom: 20px;">😴 Sleep Recommendations</h3>
+        st.markdown(f"""
+        <h3 style="color: {theme.get_color('primary')}; margin-bottom: 20px;">😴 Sleep Recommendations</h3>
         """, unsafe_allow_html=True)
         st.markdown(f"**Sleep Category:** `{profile['sleep_category']}`", unsafe_allow_html=True)
         st.markdown(f"**Average Sleep:** `{profile['average_sleep_hours']} hours`", unsafe_allow_html=True)
@@ -1027,8 +1241,8 @@ def page_recommendations():
             """, unsafe_allow_html=True)
     
     with tab4:
-        st.markdown("""
-        <h3 style="color: #2E7D32; margin-bottom: 20px;">💧 Hydration Recommendations</h3>
+        st.markdown(f"""
+        <h3 style="color: {theme.get_color('primary')}; margin-bottom: 20px;">💧 Hydration Recommendations</h3>
         """, unsafe_allow_html=True)
         st.markdown(f"**Hydration Level:** `{profile['hydration_level']}`", unsafe_allow_html=True)
         st.markdown(f"**Average Water Intake:** `{profile['average_water_intake']} liters`", unsafe_allow_html=True)
@@ -1041,8 +1255,8 @@ def page_recommendations():
             """, unsafe_allow_html=True)
     
     with tab5:
-        st.markdown("""
-        <h3 style="color: #2E7D32; margin-bottom: 20px;">⚠️ Health Alerts & Risk Indicators</h3>
+        st.markdown(f"""
+        <h3 style="color: {theme.get_color('primary')}; margin-bottom: 20px;">⚠️ Health Alerts & Risk Indicators</h3>
         """, unsafe_allow_html=True)
         for alert in recommendations["health_alerts"]:
             if "✅" in alert:
@@ -1084,8 +1298,8 @@ def page_data_management():
     <h2 class="section-header">⚙️ Data Management</h2>
     """, unsafe_allow_html=True)
     
-    st.markdown("""
-    <h3 style="color: #2E7D32; margin-bottom: 20px;">User Data Management</h3>
+    st.markdown(f"""
+    <h3 style="color: {theme.get_color('primary')}; margin-bottom: 20px;">User Data Management</h3>
     """, unsafe_allow_html=True)
     
     col1, col2 = st.columns(2, gap="medium")
@@ -1123,11 +1337,14 @@ def page_data_management():
 
 
 def main():
-    """Main application flow with professional UI"""
+    """Main application flow with professional UI - Theme aware"""
     initialize_session_state()
     
     # Display professional header
     display_professional_header()
+    
+    # Apply sidebar styling
+    st.markdown(render_sidebar_styling(), unsafe_allow_html=True)
     
     # Sidebar navigation with professional styling
     with st.sidebar:
@@ -1150,14 +1367,14 @@ def main():
                 st.session_state.current_page = page_key
                 st.rerun()
         
-        st.markdown("""<div style="margin: 30px 0; border-bottom: 2px solid rgba(255,255,255,0.2);"></div>""", unsafe_allow_html=True)
+        st.markdown(f"""<div style="margin: 30px 0; border-bottom: 2px solid {theme.get_color('border')};"></div>""", unsafe_allow_html=True)
         
         # User session info
         if st.session_state.user_id:
             st.markdown(f"""
             <div class="user-info">
                 <strong>👤 Current User</strong><br/>
-                <code style="color: #FBC02D; font-weight: bold;">{st.session_state.user_id}</code>
+                <code style="color: {theme.get_color('warning')}; font-weight: bold;">{st.session_state.user_id}</code>
             </div>
             """, unsafe_allow_html=True)
             
@@ -1166,7 +1383,7 @@ def main():
                 st.session_state.current_page = "Home"
                 st.rerun()
         else:
-            st.markdown("""
+            st.markdown(f"""
             <div class="user-info">
                 <em>👤 Not logged in</em>
             </div>
@@ -1175,8 +1392,8 @@ def main():
         st.markdown("""<div style="margin: 30px 0;"></div>""", unsafe_allow_html=True)
         
         # App info
-        st.markdown("""
-        <div style="text-align: center; color: rgba(255,255,255,0.7); font-size: 0.85rem;">
+        st.markdown(f"""
+        <div style="text-align: center; color: {theme.get_color('text_secondary')}; font-size: 0.85rem;">
             <p><strong>Health Coach AI</strong><br/>v2.0 - Professional Edition</p>
             <p>Built with ❤️ using Streamlit<br/>& AI Technology</p>
         </div>
@@ -1195,7 +1412,7 @@ def main():
         page_data_management()
     
     # Footer
-    st.markdown("""
+    st.markdown(f"""
     <div class="footer">
         <p>© 2026 Personal Health Coach AI | Built with Streamlit, Pandas, Plotly & NumPy</p>
         <p style="font-size: 0.75rem;">Privacy-focused | Local storage | No cloud data</p>
