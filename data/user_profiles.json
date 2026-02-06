@@ -196,6 +196,34 @@
       },
       "created_at": "2026-02-06T21:35:11.759801",
       "last_updated": "2026-02-06T21:35:11.759801"
+    },
+    {
+      "user_id": "abi",
+      "data": {
+        "age": 18,
+        "gender": "Male",
+        "height_cm": 185,
+        "weight_kg": 68.0,
+        "medical_conditions": "na",
+        "average_steps": 5000.0,
+        "average_sleep_hours": 7.0,
+        "average_water_intake": 2.0,
+        "steps_std_dev": NaN,
+        "sleep_std_dev": NaN,
+        "water_std_dev": NaN,
+        "total_records": 1,
+        "days_tracked": 1,
+        "bmi": 19.87,
+        "bmi_category": "Normal Weight",
+        "activity_level": "Lightly Active",
+        "sleep_category": "Optimal",
+        "hydration_level": "Adequate",
+        "health_risks": [
+          "Medical Conditions: na - Follow doctor's advice"
+        ]
+      },
+      "created_at": "2026-02-06T21:55:56.391926",
+      "last_updated": "2026-02-06T21:55:56.391926"
     }
   ]
 }

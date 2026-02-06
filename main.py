@@ -552,6 +552,15 @@ def render_sidebar_styling():
     """
 
 
+def hex_to_rgba(hex_color, alpha=0.15):
+    """Convert hex color to rgba format for Plotly"""
+    hex_color = hex_color.lstrip('#')
+    r = int(hex_color[0:2], 16)
+    g = int(hex_color[2:4], 16)
+    b = int(hex_color[4:6], 16)
+    return f"rgba({r}, {g}, {b}, {alpha})"
+
+
 def create_plotly_steps_chart(user_records):
     """Create interactive Plotly chart for daily steps - Theme aware"""
     steps_data = []
@@ -576,7 +585,7 @@ def create_plotly_steps_chart(user_records):
         line=dict(color=theme.get_color("primary"), width=3),
         marker=dict(size=8, color=theme.get_color("primary"), symbol="circle"),
         fill="tozeroy",
-        fillcolor=theme.get_color("primary") + "1A"
+        fillcolor=hex_to_rgba(theme.get_color("primary"))
     ))
     
     fig.add_hline(y=7000, line_dash="dash", line_color=theme.get_color("accent"), 
@@ -620,7 +629,7 @@ def create_plotly_sleep_chart(user_records):
         line=dict(color=theme.get_color("secondary"), width=3),
         marker=dict(size=8, color=theme.get_color("secondary"), symbol="circle"),
         fill="tozeroy",
-        fillcolor=theme.get_color("secondary") + "1A"
+        fillcolor=hex_to_rgba(theme.get_color("secondary"))
     ))
     
     fig.add_hline(y=8, line_dash="dash", line_color=theme.get_color("accent"),
