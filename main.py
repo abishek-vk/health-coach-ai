@@ -32,11 +32,11 @@ st.set_page_config(
 )
 
 # ============================================================================
-# PROFESSIONAL CSS STYLING
+# PROFESSIONAL CSS STYLING WITH THEME AWARENESS
 # ============================================================================
 st.markdown("""
     <style>
-    /* Root Colors */
+    /* Root Colors - Light Theme (Default) */
     :root {
         --primary-color: #2E7D32;
         --secondary-color: #1976D2;
@@ -49,30 +49,49 @@ st.markdown("""
         --text-primary: #212121;
         --text-secondary: #757575;
         --border-color: #E0E0E0;
+        --shadow-color: rgba(0,0,0,0.1);
+    }
+    
+    /* Dark Theme */
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #42A5F5;
+            --accent-color: #FF9800;
+            --success-color: #66BB6A;
+            --warning-color: #FDD835;
+            --danger-color: #EF5350;
+            --light-bg: #1E1E2E;
+            --card-bg: #2D2D3D;
+            --text-primary: #E0E0E0;
+            --text-secondary: #B0B0B0;
+            --border-color: #3D3D4D;
+            --shadow-color: rgba(0,0,0,0.3);
+        }
     }
     
     /* Main Container */
     .main {
-        background-color: #F5F7FA;
+        background-color: var(--light-bg);
     }
     
     /* Professional Header */
     .header-container {
-        background: linear-gradient(135deg, #2E7D32 0%, #1976D2 100%);
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
         padding: 40px 20px;
         border-radius: 12px;
         color: white;
         margin-bottom: 30px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 15px var(--shadow-color);
+        transition: all 0.3s ease;
     }
     
     .header-title {
         font-size: 3.5rem;
         font-weight: 700;
         margin: 0;
-        background: linear-gradient(90deg, #FFFFFF, #E8F5E9);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        color: white;
+        text-shadow: 0 2px 4px var(--shadow-color);
     }
     
     .header-subtitle {
@@ -80,46 +99,47 @@ st.markdown("""
         font-weight: 300;
         margin-top: 10px;
         opacity: 0.95;
+        color: white;
     }
     
     /* Card Styling */
     .metric-card {
-        background: linear-gradient(135deg, #FFFFFF 0%, #F5F5F5 100%);
+        background: var(--card-bg);
         padding: 25px;
         border-radius: 12px;
         margin: 15px 0;
-        border-left: 5px solid #2E7D32;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        border-left: 5px solid var(--primary-color);
+        box-shadow: 0 2px 8px var(--shadow-color);
         transition: all 0.3s ease;
     }
     
     .metric-card:hover {
-        box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+        box-shadow: 0 6px 16px var(--shadow-color);
         transform: translateY(-2px);
     }
     
     .metric-card-success {
-        border-left-color: #388E3C;
+        border-left-color: var(--success-color);
     }
     
     .metric-card-info {
-        border-left-color: #1976D2;
+        border-left-color: var(--secondary-color);
     }
     
     .metric-card-warning {
-        border-left-color: #F57C00;
+        border-left-color: var(--accent-color);
     }
     
     .metric-value {
         font-size: 2.2rem;
         font-weight: 700;
-        color: #2E7D32;
+        color: var(--primary-color);
         margin: 10px 0;
     }
     
     .metric-label {
         font-size: 0.95rem;
-        color: #757575;
+        color: var(--text-secondary);
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 0.5px;
@@ -127,202 +147,134 @@ st.markdown("""
     
     .metric-unit {
         font-size: 0.85rem;
-        color: #999;
+        color: var(--text-secondary);
         margin-left: 5px;
+        opacity: 0.7;
     }
     
     /* Alert Boxes */
     .alert-box {
-        background-color: #FFF8E1;
-        border-left: 5px solid #FBC02D;
+        background-color: var(--warning-color);
+        border-left: 5px solid var(--accent-color);
         padding: 18px;
         border-radius: 8px;
         margin: 15px 0;
-        color: #856404;
+        color: #333;
         font-size: 0.95rem;
         line-height: 1.6;
+        transition: all 0.3s ease;
+    }
+    
+    @media (prefers-color-scheme: dark) {
+        .alert-box {
+            background-color: #3D2F1E;
+            color: #FDD835;
+        }
     }
     
     .success-box {
-        background-color: #E8F5E9;
-        border-left: 5px solid #388E3C;
+        background-color: var(--success-color);
+        border-left: 5px solid var(--success-color);
         padding: 18px;
         border-radius: 8px;
         margin: 15px 0;
-        color: #2E5233;
+        color: white;
         font-size: 0.95rem;
         line-height: 1.6;
+        transition: all 0.3s ease;
+        opacity: 0.9;
     }
     
     .danger-box {
-        background-color: #FFEBEE;
-        border-left: 5px solid #D32F2F;
+        background-color: var(--danger-color);
+        border-left: 5px solid var(--danger-color);
         padding: 18px;
         border-radius: 8px;
         margin: 15px 0;
-        color: #6F1210;
+        color: white;
         font-size: 0.95rem;
         line-height: 1.6;
+        transition: all 0.3s ease;
+        opacity: 0.9;
     }
     
     .info-box {
-        background-color: #E3F2FD;
-        border-left: 5px solid #1976D2;
+        background-color: var(--secondary-color);
+        border-left: 5px solid var(--secondary-color);
         padding: 18px;
         border-radius: 8px;
         margin: 15px 0;
-        color: #0C3B66;
+        color: white;
         font-size: 0.95rem;
         line-height: 1.6;
+        transition: all 0.3s ease;
+        opacity: 0.9;
     }
     
     /* Section Headers */
     .section-header {
         font-size: 1.8rem;
         font-weight: 700;
-        color: #2E7D32;
+        color: var(--primary-color);
         margin: 30px 0 20px 0;
         padding-bottom: 15px;
-        border-bottom: 3px solid #2E7D32;
+        border-bottom: 3px solid var(--primary-color);
+        transition: all 0.3s ease;
     }
     
     /* Tab Styling */
     .stTabs [data-baseweb="tab-list"] {
-        background-color: #F5F7FA;
+        background-color: var(--light-bg);
         border-radius: 8px;
         padding: 5px;
     }
     
     .stTabs [data-baseweb="tab"] {
-        background-color: #FFFFFF;
+        background-color: var(--card-bg);
         border-radius: 6px;
         margin: 5px;
+        color: var(--text-primary);
+        transition: all 0.3s ease;
     }
     
     /* Buttons */
     .stButton > button {
-        background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
-        color: white;
-        border: none;
-        padding: 12px 24px;
-        border-radius: 6px;
-        font-weight: 600;
-        transition: all 0.3s ease;
+        background-color: var(--primary-color) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 6px !important;
+        transition: all 0.3s ease !important;
     }
     
     .stButton > button:hover {
-        box-shadow: 0 4px 12px rgba(46, 125, 50, 0.4);
-        transform: translateY(-2px);
+        background-color: var(--secondary-color) !important;
+        box-shadow: 0 4px 12px var(--shadow-color) !important;
+    }
+    
+    /* Text Color Adjustments */
+    p, span, label {
+        color: var(--text-primary);
+        transition: color 0.3s ease;
     }
     
     /* Input Fields */
-    .stNumberInput > div > div > input,
     .stTextInput > div > div > input,
-    .stTextArea > div > div > textarea,
-    .stSelectbox > div [data-baseweb="select"] {
-        border-radius: 6px;
-        border: 2px solid #E0E0E0;
+    .stSelectbox > div > div > select,
+    .stNumberInput > div > div > input {
+        background-color: var(--card-bg) !important;
+        color: var(--text-primary) !important;
+        border-color: var(--border-color) !important;
+        transition: all 0.3s ease !important;
     }
     
-    .stNumberInput > div > div > input:focus,
     .stTextInput > div > div > input:focus,
-    .stTextArea > div > div > textarea:focus {
-        border-color: #2E7D32;
-        box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
-    }
-    
-    /* Divider */
-    .divider {
-        margin: 30px 0;
-        border-bottom: 2px solid #E0E0E0;
-    }
-    
-    /* Progress Bar */
-    .progress-container {
-        margin: 20px 0;
-    }
-    
-    .progress-bar {
-        background-color: #E0E0E0;
-        border-radius: 10px;
-        height: 8px;
-        overflow: hidden;
-    }
-    
-    .progress-bar-fill {
-        background: linear-gradient(90deg, #2E7D32, #388E3C);
-        height: 100%;
-        border-radius: 10px;
-        transition: width 0.3s ease;
-    }
-    
-    /* Sidebar */
-    .sidebar-container {
-        background: linear-gradient(180deg, #1B5E20 0%, #2E7D32 100%);
-        color: white;
-        padding: 20px;
-        border-radius: 10px;
-        margin-bottom: 20px;
-    }
-    
-    .user-info {
-        background-color: rgba(255,255,255,0.1);
-        padding: 15px;
-        border-radius: 8px;
-        margin: 10px 0;
-        border-left: 4px solid #FBC02D;
-    }
-    
-    /* Badge */
-    .badge {
-        display: inline-block;
-        padding: 6px 12px;
-        border-radius: 20px;
-        font-size: 0.85rem;
-        font-weight: 600;
-        margin: 5px 5px 5px 0;
-    }
-    
-    .badge-success {
-        background-color: #C8E6C9;
-        color: #1B5E20;
-    }
-    
-    .badge-warning {
-        background-color: #FFE0B2;
-        color: #E65100;
-    }
-    
-    .badge-danger {
-        background-color: #FFCDD2;
-        color: #B71C1C;
-    }
-    
-    .badge-info {
-        background-color: #BBDEFB;
-        color: #0D47A1;
-    }
-    
-    /* Footer */
-    .footer {
-        text-align: center;
-        color: #757575;
-        font-size: 0.85rem;
-        margin-top: 40px;
-        padding: 20px;
-        border-top: 1px solid #E0E0E0;
-    }
-    
-    /* Chart Container */
-    .chart-container {
-        background-color: #FFFFFF;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        margin: 20px 0;
+    .stSelectbox > div > div > select:focus,
+    .stNumberInput > div > div > input:focus {
+        border-color: var(--primary-color) !important;
+        box-shadow: 0 0 0 3px var(--primary-color)33 !important;
     }
     </style>
-    """, unsafe_allow_html=True)
+""", unsafe_allow_html=True)
 
 
 # ============================================================================
