@@ -662,34 +662,44 @@ class AIRecommendationGenerator:
         
         if inactivity_prob > 0.7:
             recommendations['exercise'] = [
-                "🎯 [ML-ALERT] Critical inactivity detected",
+                "🎯 Critical inactivity detected",
                 f"🎯 Your steps are {user_profile.get('average_steps', 0):.0f} - Target 10,000 daily",
                 "🎯 Start with 30-minute walks, gradually increase intensity",
                 "🎯 Add strength training 2-3x weekly"
             ]
         elif inactivity_prob > 0.4:
             recommendations['exercise'] = [
-                f"🎯 [ML-GUIDED] Moderate activity needed - Current: {user_profile.get('average_steps', 0):.0f} steps",
+                f"🎯 Moderate activity needed - Current: {user_profile.get('average_steps', 0):.0f} steps",
                 "🎯 Increase to 8,000-10,000 steps daily",
                 "🎯 Include 150 mins moderate cardio weekly",
                 "🎯 Add flexibility training"
             ]
         else:
             recommendations['exercise'] = [
-                f"🎯 [ML-OPTIMIZED] Excellent activity level: {user_profile.get('average_steps', 0):.0f} steps",
+                f"🎯 Excellent activity level: {user_profile.get('average_steps', 0):.0f} steps",
                 "🎯 Maintain current routine",
                 "🎯 Consider HIIT or advanced training",
                 "🎯 Focus on recovery and form"
             ]
         
-        # Diet recommendations based on obesity risk
+        # Diet recommendations based on BMI category + obesity risk
         obesity_risk = health_risks.get('obesity_risk', {})
         obesity_prob = obesity_risk.get('probability', 0)
         bmi = user_profile.get('bmi', 25)
+        bmi_category = user_profile.get('bmi_category', 'Normal Weight')
         
-        if obesity_prob > 0.7:
+        # Check BMI category first for specific guidance
+        if bmi_category == "Underweight":
             recommendations['diet'] = [
-                "🥗 [ML-ALERT] High obesity risk indicated",
+                f"🥗 Underweight detected - BMI: {bmi:.1f}",
+                "🥗 Focus on calorie-dense, nutrient-rich foods",
+                "🥗 Include healthy fats (nuts, avocados, olive oil)",
+                "🥗 Eat 5-6 smaller meals throughout the day",
+                "🥗 Consider consulting a nutritionist for a meal plan"
+            ]
+        elif obesity_prob > 0.7:
+            recommendations['diet'] = [
+                "🥗 High obesity risk indicated",
                 f"🥗 Your BMI: {bmi:.1f} - Consult nutritionist",
                 "🥗 Create 500-700 kcal daily deficit",
                 "🥗 Track food intake daily",
@@ -697,14 +707,14 @@ class AIRecommendationGenerator:
             ]
         elif obesity_prob > 0.4:
             recommendations['diet'] = [
-                f"🥗 [ML-GUIDED] Moderate weight management needed - BMI: {bmi:.1f}",
+                f"🥗 Moderate weight management needed - BMI: {bmi:.1f}",
                 "🥗 Increase protein intake",
                 "🥗 Reduce processed foods and sugary drinks",
                 "🥗 Eat balanced meals: 50% veg, 25% protein, 25% carbs"
             ]
         else:
             recommendations['diet'] = [
-                f"🥗 [ML-OPTIMIZED] Excellent diet balance - BMI: {bmi:.1f}",
+                f"🥗 Excellent diet balance - BMI: {bmi:.1f}",
                 "🥗 Maintain current nutrition habits",
                 "🥗 Continue 3 balanced meals daily",
                 "🥗 Include 5+ fruit/veg servings daily"
@@ -717,7 +727,7 @@ class AIRecommendationGenerator:
         
         if sleep_prob > 0.7:
             recommendations['sleep'] = [
-                "😴 [ML-ALERT] Sleep deficiency risk detected",
+                "😴 Sleep deficiency risk detected",
                 f"😴 Your sleep: {avg_sleep:.1f}h - Target 7-9 hours",
                 "😴 Establish consistent sleep schedule",
                 "😴 No screens 30-60 mins before bed",
@@ -725,14 +735,14 @@ class AIRecommendationGenerator:
             ]
         elif sleep_prob > 0.4:
             recommendations['sleep'] = [
-                f"😴 [ML-GUIDED] Optimize sleep - Current: {avg_sleep:.1f}h",
+                f"😴 Optimize sleep - Current: {avg_sleep:.1f}h",
                 "😴 Extend to 7-9 hours nightly",
                 "😴 Use relaxation techniques",
                 "😴 Avoid caffeine after 2 PM"
             ]
         else:
             recommendations['sleep'] = [
-                f"😴 [ML-OPTIMIZED] Excellent sleep pattern: {avg_sleep:.1f}h",
+                f"😴 Excellent sleep pattern: {avg_sleep:.1f}h",
                 "😴 Maintain your sleep routine",
                 "😴 Continue monitoring sleep quality",
                 "😴 Ensure adequate rest days"
@@ -743,20 +753,20 @@ class AIRecommendationGenerator:
         
         if water_intake < 1.5:
             recommendations['hydration'] = [
-                f"💧 [ML-ALERT] Dehydration risk - Current: {water_intake:.1f}L",
+                f"💧 Dehydration risk - Current: {water_intake:.1f}L",
                 "💧 Increase to 2.5-3 liters daily",
                 "💧 Drink water with every meal",
                 "💧 Set hourly reminders"
             ]
         elif water_intake < 2.0:
             recommendations['hydration'] = [
-                f"💧 [ML-GUIDED] Improve hydration - Current: {water_intake:.1f}L",
+                f"💧 Improve hydration - Current: {water_intake:.1f}L",
                 "💧 Target 2.5-3 liters daily",
                 "💧 Carry water bottle throughout day"
             ]
         else:
             recommendations['hydration'] = [
-                f"💧 [ML-OPTIMIZED] Good hydration: {water_intake:.1f}L",
+                f"💧 Good hydration: {water_intake:.1f}L",
                 "💧 Maintain current intake",
                 "💧 Increase on exercise days"
             ]
@@ -780,6 +790,7 @@ class AIRecommendationGenerator:
         obesity = health_risks.get('obesity_risk', {})
         inactivity = health_risks.get('inactivity_risk', {})
         sleep = health_risks.get('sleep_deficiency_risk', {})
+        bmi_category = user_profile.get('bmi_category', '')
         
         # Check for critical risks
         critical_risks = []
@@ -790,10 +801,17 @@ class AIRecommendationGenerator:
             critical_risks.append("Inactivity")
         if sleep.get('probability', 0) > 0.8:
             critical_risks.append("Sleep Deficiency")
+        if bmi_category == "Underweight":
+            critical_risks.append("Underweight Status")
         
         if critical_risks:
             alerts.append(f"⚠️ [ML-CRITICAL] High-risk patterns detected: {', '.join(critical_risks)}")
             alerts.append("⚠️ Consider consulting a healthcare professional")
+        
+        # BMI-related alerts
+        if bmi_category == "Underweight":
+            alerts.append("⚠️ BMI: Underweight status detected - Focus on nutritious weight gain")
+            alerts.append("⚠️ Consult a healthcare provider or nutritionist for guidance")
         
         # Age-related alerts
         age = user_profile.get('age', 0)
