@@ -1185,11 +1185,21 @@ def page_recommendations():
     # Generate recommendations
     recommendations = RecommendationEngine.generate_comprehensive_recommendations(profile)
     
-    # Display AI enhancement status
-    if GEMINI_AVAILABLE:
+    # Display AI enhancement status - check advisor state, not just GEMINI_AVAILABLE
+    try:
+        advisor = get_gemini_advisor()
+        advisor_enabled = advisor.enabled and advisor.request_manager is not None
+    except:
+        advisor_enabled = False
+    
+    if advisor_enabled:
         col1, col2 = st.columns([4, 1])
         with col2:
             st.info("✨ AI Enhanced", icon="✨")
+    else:
+        col1, col2 = st.columns([4, 1])
+        with col2:
+            st.warning("⚠️ AI Offline", icon="⚠️")
     
     # Display recommendations in tabs
     tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
@@ -1280,16 +1290,34 @@ def page_recommendations():
         <h3 style="color: {theme.get_color('primary')}; margin-bottom: 20px;">🤖 AI-Generated Personalized Plan</h3>
         """, unsafe_allow_html=True)
         
-        if GEMINI_AVAILABLE:
-            if st.button("📋 Generate Your AI Health Plan", use_container_width=True, type="primary"):
-                with st.spinner("🚀 Generating personalized health plan with AI..."):
-                    ai_plan = RecommendationEngine.get_personalized_ai_plan(profile)
-                    if ai_plan:
-                        st.markdown(ai_plan)
-                        st.success("✅ Plan generated successfully!")
-                        st.info("💡 Tip: Bookmark or copy this plan for your records")
-                    else:
-                        st.error("Could not generate plan. Please try again.")
+        # Initialize session state for AI plan caching
+        if "ai_analysis_cache" not in st.session_state:
+            st.session_state.ai_analysis_cache = {}
+        if "last_profile_hash" not in st.session_state:
+            st.session_state.last_profile_hash = None
+        
+        # Check if Gemini advisor is available and enabled
+        try:
+            advisor = get_gemini_advisor()
+            advisor_enabled = advisor.enabled and advisor.request_manager is not None
+        except:
+            advisor_enabled = False
+        
+        if advisor_enabled:
+            # Generate AI plan with caching
+            col1, col2 = st.columns([4, 1])
+            with col1:
+                if st.button("📋 Generate Your AI Health Plan", use_container_width=True, type="primary"):
+                    with st.spinner("🚀 Generating personalized health plan with AI..."):
+                        ai_plan = RecommendationEngine.get_personalized_ai_plan(profile)
+                        if ai_plan:
+                            st.markdown(ai_plan)
+                            st.success("✅ Plan generated successfully!")
+                            st.info("💡 Tip: Bookmark or copy this plan for your records")
+                        else:
+                            st.error("Could not generate plan. Please try again.")
+            with col2:
+                st.info("✨ AI", icon="✨")
             
             st.markdown("---")
             st.subheader("📊 Health Insights")
@@ -1301,17 +1329,23 @@ def page_recommendations():
                     else:
                         st.info("Unable to generate insights at this time.")
         else:
-            try:
-                advisor = get_gemini_advisor()
-                if advisor.initialization_error:
-                    st.warning(f"⚠️ AI features temporarily unavailable: {advisor.initialization_error}")
-                    st.info("💡 **Solutions:**\n1. Check your API quota at [Google AI Studio](https://aistudio.google.com/)\n2. Verify billing is active\n3. Restart the app")
-                else:
-                    st.warning("⚠️ AI features not available. Gemini API not configured.")
-                    st.info("To enable AI features:\n1. Set your GEMINI_API_KEY in .env\n2. Restart the app")
-            except:
+            # AI features unavailable - show detailed error
+            advisor = get_gemini_advisor()
+            
+            if advisor.initialization_error:
+                st.warning(f"⚠️ AI features temporarily unavailable")
+                st.error(f"**Error:** {advisor.initialization_error}")
+                st.info("**💡 Solutions:**\n"
+                       "1. Check your API quota at [Google AI Studio](https://aistudio.google.com/)\n"
+                       "2. Verify your billing is active\n"
+                       "3. Ensure GEMINI_API_KEY is correctly set in .env\n"
+                       "4. Restart the app")
+            else:
                 st.warning("⚠️ AI features not available. Gemini API not configured.")
-                st.info("To enable AI features:\n1. Set your GEMINI_API_KEY in .env\n2. Restart the app")
+                st.info("**To enable AI features:**\n"
+                       "1. Get your API key from [Google AI Studio](https://aistudio.google.com/)\n"
+                       "2. Add `GEMINI_API_KEY=your_key_here` to your .env file\n"
+                       "3. Restart the app")
     
     st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
     

@@ -1,0 +1,31 @@
+Traceback (most recent call last):
+
+============================================================
+UNIFIED GEMINI HEALTH ANALYSIS - VERIFICATION SUITE
+============================================================
+
+============================================================
+TEST 1: Verifying imports...
+============================================================
+  File "C:\Users\Abi Venkat\health-coach-ai\verify_unified_api.py", line 38, in test_imports
+    print("\u2705 Successfully imported GeminiHealthAdvisor")
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u2705' in position 0: character maps to <undefined>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Abi Venkat\health-coach-ai\verify_unified_api.py", line 354, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "C:\Users\Abi Venkat\health-coach-ai\verify_unified_api.py", line 340, in main
+    "Imports": test_imports(),
+               ^^^^^^^^^^^^^^
+  File "C:\Users\Abi Venkat\health-coach-ai\verify_unified_api.py", line 47, in test_imports
+    print(f"\u274c Import failed: {e}")
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u274c' in position 0: character maps to <undefined>

@@ -233,14 +233,14 @@
         "height_cm": 175,
         "weight_kg": 75.0,
         "medical_conditions": "None",
-        "average_steps": 5171.0,
-        "average_sleep_hours": 6.79,
-        "average_water_intake": 1.9,
-        "steps_std_dev": 293.0,
-        "sleep_std_dev": 1.35,
-        "water_std_dev": 0.41,
-        "total_records": 7,
-        "days_tracked": 7,
+        "average_steps": 5133.0,
+        "average_sleep_hours": 6.83,
+        "average_water_intake": 1.92,
+        "steps_std_dev": 265.0,
+        "sleep_std_dev": 1.17,
+        "water_std_dev": 0.36,
+        "total_records": 9,
+        "days_tracked": 9,
         "bmi": 24.49,
         "bmi_category": "Normal Weight",
         "activity_level": "Lightly Active",
@@ -251,7 +251,7 @@
         ]
       },
       "created_at": "2026-02-06T22:00:35.043540",
-      "last_updated": "2026-02-06T23:11:21.563981"
+      "last_updated": "2026-02-07T12:38:54.138757"
     },
     {
       "user_id": "bivk",
