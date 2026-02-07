@@ -825,6 +825,20 @@
         "sleep_hours": 7.0,
         "water_intake_liters": 2.0
       }
+    },
+    {
+      "user_id": "abishekvenkat",
+      "timestamp": "2026-02-07T15:05:21.511054",
+      "data": {
+        "age": 10,
+        "gender": "Male",
+        "height_cm": 145,
+        "weight_kg": 30.0,
+        "medical_conditions": "None",
+        "daily_steps": 4400,
+        "sleep_hours": 8.5,
+        "water_intake_liters": 2.0
+      }
     }
   ]
 }

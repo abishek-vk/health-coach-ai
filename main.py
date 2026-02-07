@@ -1273,12 +1273,12 @@ def page_recommendations():
     
     # Display recommendations in tabs
     tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
-        "🏃 Exercise",
-        "🥗 Diet",
-        "😴 Sleep",
-        "💧 Hydration",
-        "⚠️ Health Alerts",
-        "📋 AI Health Plan",
+        "Exercise",
+        "Diet",
+        "Sleep",
+        "Hydration",
+        "Health Alerts",
+        "AI Health Plan",
     ])
     
     with tab1:
@@ -1396,11 +1396,11 @@ def page_recommendations():
             
             # Sub-tabs for plan components
             plan_tab1, plan_tab2, plan_tab3, plan_tab4, plan_tab5 = st.tabs([
-                "🥗 Diet Plan",
-                "🎯 Activity Plan", 
-                "😴 Sleep Plan",
-                "📊 Weekly Goals",
-                "🚨 Alerts"
+                "Diet Plan",
+                "Activity Plan", 
+                "Sleep Plan",
+                "Weekly Goals",
+                "Alerts"
             ])
             
             # Diet Plan
@@ -1505,7 +1505,7 @@ def page_recommendations():
                             st.markdown(f"**Urgency:** `{alert.get('urgency', 'IMMEDIATE')}`")
                 
                 if high_alerts:
-                    st.markdown("### ⚠️⚠️ HIGH ALERTS")
+                    st.markdown("HIGH ALERTS")
                     for alert in high_alerts:
                         with st.container():
                             st.markdown(f"**{alert.get('type', 'Alert')}**")
@@ -1514,11 +1514,11 @@ def page_recommendations():
                             st.markdown(f"**Urgency:** `{alert.get('urgency', 'WEEK 1')}`")
                 
                 if not critical_alerts and not high_alerts:
-                    st.success("✅ No critical or high alerts. Continue following your health plan!")
+                    st.success("No critical or high alerts. Continue following your health plan!")
                 
                 summary = alerts.get('summary', {})
                 if summary.get('next_steps'):
-                    st.markdown("### 📋 Next Steps")
+                    st.markdown("### Next Steps")
                     for i, step in enumerate(summary.get('next_steps', []), 1):
                         st.markdown(f"{i}. {step}")
             
@@ -1537,8 +1537,8 @@ def page_recommendations():
                     )
             
             with col2:
-                if st.button("📧 Share Plan", use_container_width=True):
-                    st.info("💡 Copy the plan JSON and share with your healthcare provider or save for your records")
+                if st.button("Share Plan", use_container_width=True):
+                    st.info("Copy the plan JSON and share with your healthcare provider or save for your records")
         
         except Exception as e:
             st.error(f"Error generating health plan: {str(e)}")
@@ -1549,15 +1549,15 @@ def page_recommendations():
     # Navigation buttons
     col1, col2, col3 = st.columns(3, gap="medium")
     with col1:
-        if st.button("📥 Add New Data", use_container_width=True):
+        if st.button("Add New Data", use_container_width=True):
             st.session_state.current_page = "Input Health Data"
             st.rerun()
     with col2:
-        if st.button("📊 View Summary", use_container_width=True):
+        if st.button("View Summary", use_container_width=True):
             st.session_state.current_page = "Health Summary"
             st.rerun()
     with col3:
-        if st.button("🏠 Home", use_container_width=True):
+        if st.button("Home", use_container_width=True):
             st.session_state.current_page = "Home"
             st.rerun()
 
