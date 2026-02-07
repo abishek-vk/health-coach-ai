@@ -453,6 +453,8 @@ def initialize_session_state():
     # Store user profile data (persists until logout)
     if "user_profile_data" not in st.session_state:
         st.session_state.user_profile_data = None
+    if "user_profile_timestamp" not in st.session_state:
+        st.session_state.user_profile_timestamp = None
     if "user_daily_metrics" not in st.session_state:
         st.session_state.user_daily_metrics = None
     
@@ -787,15 +789,19 @@ def page_home():
 
 
 def load_user_profile_data(user_id):
-    """Load user's previously saved profile data from storage"""
+    """Load user's previously saved profile data from storage - returns (data_dict, timestamp_string)"""
     try:
-        # Get user's last profile
-        profile = st.session_state.storage.get_user_profile(user_id)
-        if profile:
-            return profile.get('data', None)
+        # Get user's health records
+        records = st.session_state.storage.get_user_records(user_id)
+        if records:
+            # Get the most recent record
+            latest_record = records[-1]  # Last record is most recent
+            data = latest_record.get('data', None)
+            timestamp = latest_record.get('timestamp', 'Unknown')
+            return data, timestamp
     except Exception as e:
         logger.warning(f"Could not load user profile: {e}")
-    return None
+    return None, None
 
 def page_input_health_data():
     """Page for inputting health data with enhanced UI"""
@@ -815,7 +821,17 @@ def page_input_health_data():
     
     # Load user profile data if not already loaded (persists in session)
     if st.session_state.user_profile_data is None:
-        st.session_state.user_profile_data = load_user_profile_data(st.session_state.user_id)
+        data, timestamp = load_user_profile_data(st.session_state.user_id)
+        st.session_state.user_profile_data = data
+        st.session_state.user_profile_timestamp = timestamp
+        
+        # If data was loaded from storage, clear widget states so they use new defaults
+        if data:
+            widget_keys = ["age_input", "height_input", "gender_input", "weight_input", 
+                          "medical_conditions_input", "daily_steps_input", "sleep_hours_input", "water_intake_input"]
+            for key in widget_keys:
+                if key in st.session_state:
+                    del st.session_state[key]
     
     # Set defaults from saved data or use fallback values
     default_age = st.session_state.user_profile_data.get('age', 30) if st.session_state.user_profile_data else 30
@@ -823,13 +839,21 @@ def page_input_health_data():
     default_height = st.session_state.user_profile_data.get('height_cm', 175) if st.session_state.user_profile_data else 175
     default_weight = st.session_state.user_profile_data.get('weight_kg', 75.0) if st.session_state.user_profile_data else 75.0
     default_medical = st.session_state.user_profile_data.get('medical_conditions', '') if st.session_state.user_profile_data else ''
-    default_steps = st.session_state.user_profile_data.get('average_steps', 5000) if st.session_state.user_profile_data else 5000
-    default_sleep = st.session_state.user_profile_data.get('average_sleep_hours', 7.0) if st.session_state.user_profile_data else 7.0
-    default_water = st.session_state.user_profile_data.get('average_water_intake', 2.0) if st.session_state.user_profile_data else 2.0
+    default_steps = st.session_state.user_profile_data.get('daily_steps', 5000) if st.session_state.user_profile_data else 5000
+    default_sleep = st.session_state.user_profile_data.get('sleep_hours', 7.0) if st.session_state.user_profile_data else 7.0
+    default_water = st.session_state.user_profile_data.get('water_intake_liters', 2.0) if st.session_state.user_profile_data else 2.0
     
     # Display when data was last updated
-    if st.session_state.user_profile_data:
-        st.info(f"✅ Last updated: {st.session_state.user_profile_data.get('last_updated', 'Unknown')}")
+    if st.session_state.user_profile_data and st.session_state.user_profile_timestamp:
+        # Parse ISO format timestamp to readable format
+        try:
+            from datetime import datetime
+            dt = datetime.fromisoformat(st.session_state.user_profile_timestamp)
+            formatted_time = dt.strftime("%B %d, %Y at %I:%M %p")
+            st.info(f"✅ Last updated: {formatted_time}")
+        except:
+            st.info(f"✅ Last updated: {st.session_state.user_profile_timestamp}")
+    
     
     # Create tabs for different data input sections
     tab1, tab2 = st.tabs(["Basic Information", "Daily Metrics"])
@@ -991,7 +1015,9 @@ def page_input_health_data():
                 # Save to storage
                 if st.session_state.storage.add_health_record(st.session_state.user_id, health_record):
                     # Update session state with new data
-                    st.session_state.user_profile_data = load_user_profile_data(st.session_state.user_id)
+                    data, timestamp = load_user_profile_data(st.session_state.user_id)
+                    st.session_state.user_profile_data = data
+                    st.session_state.user_profile_timestamp = timestamp
                     st.success("Health data saved successfully!")
                     st.balloons()
                 else:
@@ -1468,6 +1494,7 @@ def main():
                 st.session_state.user_id = None
                 st.session_state.current_page = "Home"
                 st.session_state.user_profile_data = None
+                st.session_state.user_profile_timestamp = None
                 st.session_state.user_daily_metrics = None
                 st.rerun()
         else:
