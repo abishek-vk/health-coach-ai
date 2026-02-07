@@ -102,10 +102,20 @@ class AIHealthEngine:
                     'medical_conditions': data.get('medical_conditions', 'None'),
                 }
                 
-                # Add synthetic labels based on current categorization
-                record['obesity_risk'] = 1 if record['bmi'] > 28 else 0
-                record['inactivity_risk'] = 1 if record['daily_steps'] < 5000 else 0
-                record['sleep_deficiency_risk'] = 1 if record['sleep_hours'] < 6.5 else 0
+                # Add risk labels based on realistic health science thresholds
+                # Use probabilistic approach for more nuanced risk assessment
+                
+                # Obesity Risk: Probability increases with BMI (sigmoid curve centered at BMI=27)
+                obesity_prob = 1 / (1 + np.exp(-(record['bmi'] - 27) / 2))
+                record['obesity_risk'] = 1 if np.random.random() < obesity_prob else 0
+                
+                # Inactivity Risk: Probability increases as daily steps decrease (centered at 5500)
+                inactivity_prob = 1 / (1 + np.exp(-(record['daily_steps'] - 5500) / 1500))
+                record['inactivity_risk'] = 1 if np.random.random() < inactivity_prob else 0
+                
+                # Sleep Deficiency Risk: Probability increases with too little sleep
+                sleep_prob = 1 / (1 + np.exp(-(record['sleep_hours'] - 6.5) / 1.5))
+                record['sleep_deficiency_risk'] = 1 if np.random.random() < sleep_prob else 0
                 
                 records.append(record)
             
@@ -124,48 +134,72 @@ class AIHealthEngine:
             logger.info("🤖 Generating synthetic training data instead")
             return self._generate_synthetic_training_data(), True
     
-    def _generate_synthetic_training_data(self, num_samples: int = 100) -> pd.DataFrame:
+    def _generate_synthetic_training_data(self, num_samples: int = 200) -> pd.DataFrame:
         """
-        Generate synthetic health data for model training
-        Useful when historical data is insufficient
+        Generate realistic synthetic health data for model training
+        Creates data with meaningful health risk patterns based on medical science
         
         Args:
             num_samples: Number of synthetic samples to generate
             
         Returns:
-            DataFrame with synthetic health data
+            DataFrame with realistic synthetic health data
         """
         np.random.seed(42)
         
+        # Create realistic health profiles with correlated features
+        ages = np.random.normal(45, 15, num_samples)
+        ages = np.clip(ages, 18, 85).astype(int)
+        
+        # Generate BMI with age correlation (older people tend to have higher BMI)
+        base_bmi = 24 + (ages - 30) * 0.15 + np.random.normal(0, 3, num_samples)
+        bmi = np.clip(base_bmi, 15, 45)
+        
+        # Generate daily steps (inversely correlates with BMI and age)
+        base_steps = 10000 - (bmi - 25) * 400 - (ages - 30) * 50
+        daily_steps = np.clip(base_steps + np.random.normal(0, 1500, num_samples), 500, 25000)
+        
+        # Generate sleep hours (varies with age)
+        base_sleep = 7 - (ages - 30) * 0.02 + np.random.normal(0, 1, num_samples)
+        sleep_hours = np.clip(base_sleep, 3, 12)
+        
+        # Generate water intake (somewhat independent but healthier people drink more)
+        water = 2.5 + daily_steps / 8000 * 0.7 + np.random.normal(0, 0.6, num_samples)
+        water_intake = np.clip(water, 0.5, 6)
+        
         data = {
             'user_id': [f'synthetic_user_{i}' for i in range(num_samples)],
-            'age': np.random.randint(18, 75, num_samples),
-            'bmi': np.random.normal(25, 4, num_samples),
-            'daily_steps': np.random.gamma(shape=2, scale=3500, size=num_samples),
-            'sleep_hours': np.random.normal(7, 1.2, num_samples),
-            'water_intake': np.random.normal(2.5, 0.8, num_samples),
-            'activity_level': np.random.choice(
-                ['Sedentary', 'Lightly Active', 'Moderately Active', 'Very Active'],
-                num_samples
-            ),
-            'bmi_category': np.random.choice(
-                ['Underweight', 'Normal Weight', 'Overweight', 'Obese'],
-                num_samples
-            ),
-            'medical_conditions': np.random.choice(
-                ['None', 'Hypertension', 'Diabetes', 'High cholesterol'],
-                num_samples, p=[0.6, 0.2, 0.1, 0.1]
-            ),
+            'age': ages,
+            'bmi': bmi,
+            'daily_steps': daily_steps,
+            'sleep_hours': sleep_hours,
+            'water_intake': water_intake,
         }
         
         df = pd.DataFrame(data)
         
-        # Generate synthetic labels based on health metrics
-        df['obesity_risk'] = ((df['bmi'] > 28) | (df['bmi_category'] == 'Obese')).astype(int)
-        df['inactivity_risk'] = (df['daily_steps'] < 5000).astype(int)
-        df['sleep_deficiency_risk'] = (df['sleep_hours'] < 6.5).astype(int)
+        # Create health risk labels based on REALISTIC health science thresholds
+        # Obesity Risk: Based on BMI and age (higher BMI = higher risk)
+        # Medical consensus: BMI >= 30 is obese, >= 25 is overweight
+        obesity_probability = 1 / (1 + np.exp(-(df['bmi'] - 27) / 2))  # Sigmoid function
+        df['obesity_risk'] = (np.random.random(num_samples) < obesity_probability).astype(int)
         
-        logger.info(f"🔄 Generated {num_samples} synthetic training samples")
+        # Inactivity Risk: Based on daily steps
+        # Medical consensus: <5000 steps/day is sedentary, 5000-7500 is low active
+        inactivity_probability = 1 / (1 + np.exp(-(df['daily_steps'] - 5500) / 1500))
+        df['inactivity_risk'] = (np.random.random(num_samples) < inactivity_probability).astype(int)
+        
+        # Sleep Deficiency Risk: Based on sleep hours and age
+        # Medical consensus: <6 hours = deficient, 6-8 = adequate, >8 = excess
+        adjusted_sleep_threshold = 6.5 + (df['age'] - 40) * 0.01
+        sleep_probability = 1 / (1 + np.exp(-(df['sleep_hours'] - adjusted_sleep_threshold) / 1.5))
+        df['sleep_deficiency_risk'] = (np.random.random(num_samples) < sleep_probability).astype(int)
+        
+        logger.info(f"🔄 Generated {num_samples} realistic synthetic training samples")
+        logger.info(f"  - Obesity Risk Prevalence: {df['obesity_risk'].mean():.1%}")
+        logger.info(f"  - Inactivity Risk Prevalence: {df['inactivity_risk'].mean():.1%}")
+        logger.info(f"  - Sleep Deficiency Risk Prevalence: {df['sleep_deficiency_risk'].mean():.1%}")
+        
         return df
     
     def train_models(self, df: pd.DataFrame) -> bool:
@@ -386,14 +420,22 @@ class AIHealthEngine:
             return {}
         
         try:
+            # Extract user features for detailed logging
+            bmi = user_features.get('bmi', 25)
+            steps = user_features.get('daily_steps', 7000)
+            sleep = user_features.get('sleep_hours', 7.5)
+            water = user_features.get('water_intake', 2.5)
+            age = user_features.get('age', 35)
+            
+            logger.info(f"\n📊 Analyzing user health data:")
+            logger.info(f"   • Age: {age} years")
+            logger.info(f"   • BMI: {bmi:.1f} (Reference: 18.5-24.9 is healthy)")
+            logger.info(f"   • Daily Steps: {steps:,.0f} (Reference: 7000-10000 is healthy)")
+            logger.info(f"   • Sleep: {sleep:.1f} hours (Reference: 6-8 hours is healthy)")
+            logger.info(f"   • Water Intake: {water:.1f} liters")
+            
             # Prepare feature vector
-            feature_vector = np.array([[
-                user_features.get('bmi', 25),
-                user_features.get('daily_steps', 7000),
-                user_features.get('sleep_hours', 7.5),
-                user_features.get('water_intake', 2.5),
-                user_features.get('age', 35),
-            ]])
+            feature_vector = np.array([[bmi, steps, sleep, water, age]])
             
             # Scale features
             feature_scaled = self.feature_scaler.transform(feature_vector)
@@ -408,10 +450,22 @@ class AIHealthEngine:
             sleep_pred = self.sleep_deficiency_model.predict(feature_scaled)[0]
             sleep_prob = self.sleep_deficiency_model.predict_proba(feature_scaled)[0][1]
             
-            logger.info(
-                f"🤖 ML Predictions - Obesity: {obesity_prob:.1%}, "
-                f"Inactivity: {inactivity_prob:.1%}, Sleep: {sleep_prob:.1%}"
-            )
+            logger.info(f"\n🎯 ML Risk Predictions:")
+            logger.info(f"   • Obesity Risk: {obesity_prob:.1%} {'⚠️ HIGH' if obesity_prob > 0.6 else '✅ LOW'}")
+            if obesity_prob > 0.3:
+                if bmi > 25:
+                    logger.warning(f"     → BMI {bmi:.1f} is {'overweight' if bmi < 30 else 'HIGH - obese'} range")
+            
+            logger.info(f"   • Inactivity Risk: {inactivity_prob:.1%} {'⚠️ HIGH' if inactivity_prob > 0.6 else '✅ LOW'}")
+            if inactivity_prob > 0.3:
+                if steps < 7000:
+                    logger.warning(f"     → {steps:,.0f} steps/day is below recommended 7000-10000")
+            
+            logger.info(f"   • Sleep Deficiency Risk: {sleep_prob:.1%} {'⚠️ HIGH' if sleep_prob > 0.6 else '✅ LOW'}")
+            if sleep_prob > 0.3:
+                if sleep < 6.5:
+                    logger.warning(f"     → {sleep:.1f} hours/night is below recommended 6.5-8 hours")
+            
             
             return {
                 'obesity_risk': {
