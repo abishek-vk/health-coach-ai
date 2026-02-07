@@ -1,10 +1,17 @@
 """
 recommendation_engine.py - Intelligent recommendation generation
 Analyzes health profiles and generates personalized health recommendations
+Enhanced with Gemini AI for personalization
 """
 
 from typing import List, Dict, Optional, Any
 from modules.profile_summarizer import HealthProfileSummarizer
+
+try:
+    from modules.gemini_integration import get_gemini_advisor
+    GEMINI_AVAILABLE = True
+except ImportError:
+    GEMINI_AVAILABLE = False
 
 
 class RecommendationEngine:
@@ -216,12 +223,13 @@ class RecommendationEngine:
         return alerts if alerts else ["✅ No major health risks identified. Keep up healthy habits!"]
     
     @staticmethod
-    def generate_comprehensive_recommendations(profile: Dict[str, Any]) -> Dict[str, List[str]]:
+    def generate_comprehensive_recommendations(profile: Dict[str, Any], use_ai_enhancement: bool = True) -> Dict[str, List[str]]:
         """
         Generate comprehensive personalized recommendations
         
         Args:
             profile: User health profile
+            use_ai_enhancement: Whether to enhance with Gemini AI (if available)
             
         Returns:
             Dictionary containing all recommendation categories
@@ -234,4 +242,81 @@ class RecommendationEngine:
             "health_alerts": RecommendationEngine.generate_health_alerts(profile)
         }
         
+        # Enhance with Gemini AI if available and enabled
+        if use_ai_enhancement and GEMINI_AVAILABLE:
+            try:
+                advisor = get_gemini_advisor()
+                recommendations = advisor.enhance_recommendations(recommendations, profile)
+            except Exception as e:
+                print(f"⚠️ AI enhancement skipped: {e}")
+        
         return recommendations
+    
+    @staticmethod
+    def get_personalized_ai_plan(profile: Dict[str, Any]) -> Optional[str]:
+        """
+        Get AI-generated personalized health plan
+        
+        Args:
+            profile: User health profile
+            
+        Returns:
+            Personalized plan or None if Gemini unavailable
+        """
+        if GEMINI_AVAILABLE:
+            try:
+                advisor = get_gemini_advisor()
+                return advisor.get_personalized_plan(profile)
+            except Exception as e:
+                print(f"⚠️ Error generating AI plan: {e}")
+        
+        return None
+    
+    @staticmethod
+    def get_health_insights(profile: Dict[str, Any]) -> Optional[str]:
+        """
+        Get AI health insights analysis
+        
+        Args:
+            profile: User health profile
+            
+        Returns:
+            Health insights or None if Gemini unavailable
+        """
+        if GEMINI_AVAILABLE:
+            try:
+                advisor = get_gemini_advisor()
+                return advisor.get_health_insights(profile)
+            except Exception as e:
+                print(f"⚠️ Error generating insights: {e}")
+        
+        return None
+    
+    @staticmethod
+    def get_motivation_message(category: str, progress: Optional[Dict] = None) -> str:
+        """
+        Get motivational message for health category
+        
+        Args:
+            category: Health category (exercise, diet, sleep, etc.)
+            progress: Optional progress data
+            
+        Returns:
+            Motivational message
+        """
+        if GEMINI_AVAILABLE:
+            try:
+                advisor = get_gemini_advisor()
+                return advisor.get_motivation_message(category, progress)
+            except Exception as e:
+                print(f"⚠️ Error generating motivation: {e}")
+        
+        # Fallback motivation
+        messages = {
+            "exercise": "💪 Keep moving! Every step counts towards your fitness goals!",
+            "diet": "🥗 You're making great nutritional choices! Keep it up!",
+            "sleep": "😴 Rest is crucial for health. Stick to your sleep schedule!",
+            "hydration": "💧 Stay hydrated! Your body will thank you!",
+            "overall": "🎯 You're on a great health journey. Keep pushing!"
+        }
+        return messages.get(category, messages["overall"])

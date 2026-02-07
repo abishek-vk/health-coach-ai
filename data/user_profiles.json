@@ -233,14 +233,14 @@
         "height_cm": 175,
         "weight_kg": 75.0,
         "medical_conditions": "None",
-        "average_steps": 5300.0,
-        "average_sleep_hours": 6.62,
-        "average_water_intake": 1.82,
-        "steps_std_dev": 346.0,
-        "sleep_std_dev": 1.89,
-        "water_std_dev": 0.57,
-        "total_records": 4,
-        "days_tracked": 4,
+        "average_steps": 5171.0,
+        "average_sleep_hours": 6.79,
+        "average_water_intake": 1.9,
+        "steps_std_dev": 293.0,
+        "sleep_std_dev": 1.35,
+        "water_std_dev": 0.41,
+        "total_records": 7,
+        "days_tracked": 7,
         "bmi": 24.49,
         "bmi_category": "Normal Weight",
         "activity_level": "Lightly Active",
@@ -251,7 +251,33 @@
         ]
       },
       "created_at": "2026-02-06T22:00:35.043540",
-      "last_updated": "2026-02-06T22:07:30.596975"
+      "last_updated": "2026-02-06T23:11:21.563981"
+    },
+    {
+      "user_id": "bivk",
+      "data": {
+        "age": 30,
+        "gender": "Male",
+        "height_cm": 175,
+        "weight_kg": 75.0,
+        "medical_conditions": "None",
+        "average_steps": 5000.0,
+        "average_sleep_hours": 7.0,
+        "average_water_intake": 2.0,
+        "steps_std_dev": NaN,
+        "sleep_std_dev": NaN,
+        "water_std_dev": NaN,
+        "total_records": 1,
+        "days_tracked": 1,
+        "bmi": 24.49,
+        "bmi_category": "Normal Weight",
+        "activity_level": "Lightly Active",
+        "sleep_category": "Optimal",
+        "hydration_level": "Adequate",
+        "health_risks": []
+      },
+      "created_at": "2026-02-06T23:02:52.734948",
+      "last_updated": "2026-02-06T23:03:06.792807"
     }
   ]
 }
