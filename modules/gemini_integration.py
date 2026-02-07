@@ -24,8 +24,8 @@ class GeminiHealthAdvisor:
         if self.enabled and self.api_key:
             try:
                 genai.configure(api_key=self.api_key)
-                # Use the latest available Gemini model
-                self.model = genai.GenerativeModel('gemini-1.5-pro')
+                # Use gemini-pro (stable, widely available model)
+                self.model = genai.GenerativeModel('gemini-pro')
             except Exception as e:
                 print(f"⚠️ Warning: Failed to initialize Gemini API: {e}")
                 self.enabled = False
