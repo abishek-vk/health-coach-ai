@@ -1272,13 +1272,12 @@ def page_recommendations():
             st.info("✨ AI Enhanced", icon="✨")
     
     # Display recommendations in tabs
-    tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
+    tab1, tab2, tab3, tab4, tab5 = st.tabs([
         "🏃 Exercise",
         "🥗 Diet",
         "😴 Sleep",
         "💧 Hydration",
         "⚠️ Health Alerts",
-        "🤖 AI Plan"
     ])
     
     with tab1:
@@ -1355,34 +1354,34 @@ def page_recommendations():
                 </div>
                 """, unsafe_allow_html=True)
     
-    with tab6:
-        st.markdown(f"""
-        <h3 style="color: {theme.get_color('primary')}; margin-bottom: 20px;">🤖 AI-Generated Personalized Plan</h3>
-        """, unsafe_allow_html=True)
-        
-        if GEMINI_AVAILABLE:
-            if st.button("📋 Generate Your AI Health Plan", use_container_width=True, type="primary"):
-                with st.spinner("🚀 Generating personalized health plan with AI..."):
-                    ai_plan = RecommendationEngine.get_personalized_ai_plan(profile)
-                    if ai_plan:
-                        st.markdown(ai_plan)
-                        st.success("✅ Plan generated successfully!")
-                        st.info("💡 Tip: Bookmark or copy this plan for your records")
-                    else:
-                        st.error("Could not generate plan. Please try again.")
-            
-            st.markdown("---")
-            st.subheader("📊 Health Insights")
-            if st.button("🔍 Get AI Health Insights", use_container_width=True):
-                with st.spinner("Analyzing your health profile..."):
-                    insights = RecommendationEngine.get_health_insights(profile)
-                    if insights:
-                        st.markdown(insights)
-                    else:
-                        st.info("Unable to generate insights at this time.")
-        else:
-            st.warning("⚠️ AI features not available. Gemini API not configured.")
-            st.info("To enable AI features:\n1. Set your GEMINI_API_KEY in .env\n2. Install: `pip install google-generativeai`\n3. Restart the app")
+    # with tab6:
+    #     st.markdown(f"""
+    #     <h3 style="color: {theme.get_color('primary')}; margin-bottom: 20px;">🤖 AI-Generated Personalized Plan</h3>
+    #     """, unsafe_allow_html=True)
+    #     
+    #     if GEMINI_AVAILABLE:
+    #         if st.button("📋 Generate Your AI Health Plan", use_container_width=True, type="primary"):
+    #             with st.spinner("🚀 Generating personalized health plan with AI..."):
+    #                 ai_plan = RecommendationEngine.get_personalized_ai_plan(profile)
+    #                 if ai_plan:
+    #                     st.markdown(ai_plan)
+    #                     st.success("✅ Plan generated successfully!")
+    #                     st.info("💡 Tip: Bookmark or copy this plan for your records")
+    #                 else:
+    #                     st.error("Could not generate plan. Please try again.")
+    #         
+    #         st.markdown("---")
+    #         st.subheader("📊 Health Insights")
+    #         if st.button("🔍 Get AI Health Insights", use_container_width=True):
+    #             with st.spinner("Analyzing your health profile..."):
+    #                 insights = RecommendationEngine.get_health_insights(profile)
+    #                 if insights:
+    #                     st.markdown(insights)
+    #                 else:
+    #                     st.info("Unable to generate insights at this time.")
+    #     else:
+    #         st.warning("⚠️ AI features not available. Gemini API not configured.")
+    #         st.info("To enable AI features:\n1. Set your GEMINI_API_KEY in .env\n2. Install: `pip install google-generativeai`\n3. Restart the app")
     
     st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
     
