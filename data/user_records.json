@@ -811,6 +811,20 @@
         "sleep_hours": 7.0,
         "water_intake_liters": 2.0
       }
+    },
+    {
+      "user_id": "pooja",
+      "timestamp": "2026-02-07T14:41:40.051983",
+      "data": {
+        "age": 30,
+        "gender": "Male",
+        "height_cm": 175,
+        "weight_kg": 75.0,
+        "medical_conditions": "None",
+        "daily_steps": 5000,
+        "sleep_hours": 7.0,
+        "water_intake_liters": 2.0
+      }
     }
   ]
 }

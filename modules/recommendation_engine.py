@@ -10,6 +10,7 @@ from typing import List, Dict, Optional, Any
 from pathlib import Path
 
 from modules.profile_summarizer import HealthProfileSummarizer
+from modules.health_plan_generator import HealthPlanGenerator
 
 try:
     from modules.gemini_integration import get_gemini_advisor
@@ -465,6 +466,99 @@ class RecommendationEngine:
             logger.error(f"Error assigning user cluster: {e}")
             return None
     
+    @classmethod
+    def generate_health_plan(
+        cls,
+        profile: Dict[str, Any],
+        use_ml_predictions: bool = True
+    ) -> Dict[str, Any]:
+        """
+        Generate a comprehensive AI-personalized health plan
+        Uses ML predictions if available, falls back to rule-based generation
+        
+        Args:
+            profile: User health profile
+            use_ml_predictions: Whether to use ML models for predictions
+            
+        Returns:
+            Comprehensive health plan dictionary
+        """
+        logger.info("🎯 Generating Personalized Health Plan")
+        
+        try:
+            # Get ML predictions and cluster assignment if available
+            health_risks = None
+            cluster_assignment = None
+            cluster_id = 0
+            
+            if use_ml_predictions and cls._ml_initialized and cls._ai_engine:
+                try:
+                    # Prepare user features
+                    user_features = {
+                        'age': profile.get('age', 35),
+                        'bmi': profile.get('bmi', 25),
+                        'daily_steps': profile.get('average_steps', 7000),
+                        'sleep_hours': profile.get('average_sleep_hours', 7.5),
+                        'water_intake': profile.get('average_water_intake', 2.5),
+                    }
+                    
+                    # Get ML predictions
+                    health_risks = cls._ai_engine.predict_health_risks(user_features)
+                    cluster_assignment = cls._ai_engine.assign_user_cluster(user_features)
+                    
+                    if cluster_assignment:
+                        cluster_id = cluster_assignment.get('cluster_id', 0)
+                        logger.info(f"✅ ML predictions obtained - Cluster {cluster_id}")
+                    
+                except Exception as e:
+                    logger.warning(f"⚠️ ML prediction failed: {e}, using fallback")
+                    health_risks = None
+            
+            # Generate health plan
+            health_plan = HealthPlanGenerator.generate_personalized_health_plan(
+                predictions=health_risks,
+                cluster_id=cluster_id,
+                user_profile=profile
+            )
+            
+            logger.info("✅ Health Plan Generated Successfully")
+            return health_plan
+            
+        except Exception as e:
+            logger.error(f"❌ Error generating health plan: {e}")
+            logger.warning("⚠️ Returning rule-based fallback plan")
+            return HealthPlanGenerator._generate_rule_based_plan(
+                cluster_id=0,
+                user_profile=profile
+            )
+    
+    @classmethod
+    def get_health_plan_summary(cls, health_plan: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Get a summary of the health plan for quick reference
+        
+        Args:
+            health_plan: Generated health plan dictionary
+            
+        Returns:
+            Summary dictionary
+        """
+        try:
+            summary = {
+                'cluster': health_plan.get('metadata', {}).get('cluster_name', 'Unknown'),
+                'risk_levels': health_plan.get('metadata', {}).get('risk_summary', {}),
+                'diet_focus': health_plan.get('diet_plan', {}).get('focus_area', ''),
+                'activity_target': health_plan.get('activity_plan', {}).get('daily_target_steps', 0),
+                'sleep_target': health_plan.get('sleep_plan', {}).get('target_sleep_hours', '7-9 hours'),
+                'weekly_goals_count': len(health_plan.get('weekly_goals', {}).get('goals', [])),
+                'critical_alerts': len(health_plan.get('alerts', {}).get('critical_alerts', [])),
+                'has_urgent_actions': len(health_plan.get('alerts', {}).get('critical_alerts', [])) > 0
+            }
+            return summary
+        except Exception as e:
+            logger.error(f"Error getting health plan summary: {e}")
+            return {}
+
     @staticmethod
     def get_personalized_ai_plan(profile: Dict[str, Any]) -> Optional[str]:
         """

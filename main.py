@@ -1272,12 +1272,13 @@ def page_recommendations():
             st.info("✨ AI Enhanced", icon="✨")
     
     # Display recommendations in tabs
-    tab1, tab2, tab3, tab4, tab5 = st.tabs([
+    tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
         "🏃 Exercise",
         "🥗 Diet",
         "😴 Sleep",
         "💧 Hydration",
         "⚠️ Health Alerts",
+        "📋 AI Health Plan",
     ])
     
     with tab1:
@@ -1354,34 +1355,194 @@ def page_recommendations():
                 </div>
                 """, unsafe_allow_html=True)
     
-    # with tab6:
-    #     st.markdown(f"""
-    #     <h3 style="color: {theme.get_color('primary')}; margin-bottom: 20px;">🤖 AI-Generated Personalized Plan</h3>
-    #     """, unsafe_allow_html=True)
-    #     
-    #     if GEMINI_AVAILABLE:
-    #         if st.button("📋 Generate Your AI Health Plan", use_container_width=True, type="primary"):
-    #             with st.spinner("🚀 Generating personalized health plan with AI..."):
-    #                 ai_plan = RecommendationEngine.get_personalized_ai_plan(profile)
-    #                 if ai_plan:
-    #                     st.markdown(ai_plan)
-    #                     st.success("✅ Plan generated successfully!")
-    #                     st.info("💡 Tip: Bookmark or copy this plan for your records")
-    #                 else:
-    #                     st.error("Could not generate plan. Please try again.")
-    #         
-    #         st.markdown("---")
-    #         st.subheader("📊 Health Insights")
-    #         if st.button("🔍 Get AI Health Insights", use_container_width=True):
-    #             with st.spinner("Analyzing your health profile..."):
-    #                 insights = RecommendationEngine.get_health_insights(profile)
-    #                 if insights:
-    #                     st.markdown(insights)
-    #                 else:
-    #                     st.info("Unable to generate insights at this time.")
-    #     else:
-    #         st.warning("⚠️ AI features not available. Gemini API not configured.")
-    #         st.info("To enable AI features:\n1. Set your GEMINI_API_KEY in .env\n2. Install: `pip install google-generativeai`\n3. Restart the app")
+    with tab6:
+        st.markdown(f"""
+        <h3 style="color: {theme.get_color('primary')}; margin-bottom: 20px;">📋 AI Personalized Health Plan</h3>
+        """, unsafe_allow_html=True)
+        
+        # Generate health plan
+        try:
+            health_plan = RecommendationEngine.generate_health_plan(profile)
+            
+            # Display plan metadata
+            metadata = health_plan.get('metadata', {})
+            risk_summary = metadata.get('risk_summary', {})
+            
+            # Risk Level Summary
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                obesity_info = risk_summary.get('obesity_risk', {})
+                obesity_emoji = obesity_info.get('emoji', '⚠️')
+                obesity_prob = obesity_info.get('probability', 0)
+                st.metric("🍔 Obesity Risk", f"{obesity_prob:.0%}", obesity_info.get('level', 'Unknown'))
+            
+            with col2:
+                inactivity_info = risk_summary.get('inactivity_risk', {})
+                inactivity_emoji = inactivity_info.get('emoji', '⚠️')
+                inactivity_prob = inactivity_info.get('probability', 0)
+                st.metric("🪑 Inactivity Risk", f"{inactivity_prob:.0%}", inactivity_info.get('level', 'Unknown'))
+            
+            with col3:
+                sleep_info = risk_summary.get('sleep_deficiency_risk', {})
+                sleep_emoji = sleep_info.get('emoji', '⚠️')
+                sleep_prob = sleep_info.get('probability', 0)
+                st.metric("😴 Sleep Risk", f"{sleep_prob:.0%}", sleep_info.get('level', 'Unknown'))
+            
+            st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
+            
+            # Cluster Information
+            cluster_name = metadata.get('cluster_name', 'Unknown')
+            st.markdown(f"**👥 Lifestyle Cluster:** {cluster_name}", unsafe_allow_html=True)
+            
+            # Sub-tabs for plan components
+            plan_tab1, plan_tab2, plan_tab3, plan_tab4, plan_tab5 = st.tabs([
+                "🥗 Diet Plan",
+                "🎯 Activity Plan", 
+                "😴 Sleep Plan",
+                "📊 Weekly Goals",
+                "🚨 Alerts"
+            ])
+            
+            # Diet Plan
+            with plan_tab1:
+                diet_plan = health_plan.get('diet_plan', {})
+                st.markdown(f"### {diet_plan.get('title', '🥗 Diet Plan')}", unsafe_allow_html=True)
+                st.markdown(f"**Priority:** `{diet_plan.get('priority', 'MAINTAIN')}`", unsafe_allow_html=True)
+                st.markdown(f"**Focus:** {diet_plan.get('focus_area', 'Balanced nutrition')}", unsafe_allow_html=True)
+                
+                st.markdown("**Recommendations:**")
+                for i, rec in enumerate(diet_plan.get('recommendations', []), 1):
+                    st.markdown(f"{i}. {rec}")
+                
+                if diet_plan.get('daily_structure'):
+                    st.markdown("**Daily Meal Structure:**")
+                    for meal, description in diet_plan.get('daily_structure', {}).items():
+                        st.markdown(f"- **{meal.replace('_', ' ').title()}:** {description}")
+                
+                if diet_plan.get('foods_to_avoid'):
+                    st.markdown("**Foods to Avoid:**")
+                    for food in diet_plan.get('foods_to_avoid', []):
+                        st.markdown(f"- {food}")
+            
+            # Activity Plan
+            with plan_tab2:
+                activity_plan = health_plan.get('activity_plan', {})
+                st.markdown(f"### {activity_plan.get('title', '🎯 Activity Plan')}", unsafe_allow_html=True)
+                st.markdown(f"**Priority:** `{activity_plan.get('priority', 'MAINTAIN')}`", unsafe_allow_html=True)
+                st.markdown(f"**Daily Step Target:** `{activity_plan.get('daily_target_steps', 10000)} steps`", unsafe_allow_html=True)
+                st.markdown(f"**Weekly Target:** `{activity_plan.get('weekly_target_minutes', 300)} minutes of exercise`", unsafe_allow_html=True)
+                st.markdown(f"**Focus:** {activity_plan.get('focus_area', 'Physical activity')}", unsafe_allow_html=True)
+                
+                st.markdown("**Recommendations:**")
+                for i, rec in enumerate(activity_plan.get('recommendations', []), 1):
+                    st.markdown(f"{i}. {rec}")
+                
+                if activity_plan.get('weekly_schedule'):
+                    st.markdown("**Weekly Schedule:**")
+                    for day, activity in activity_plan.get('weekly_schedule', {}).items():
+                        st.markdown(f"- **{day.title()}:** {activity}")
+            
+            # Sleep Plan
+            with plan_tab3:
+                sleep_plan = health_plan.get('sleep_plan', {})
+                st.markdown(f"### {sleep_plan.get('title', '😴 Sleep Plan')}", unsafe_allow_html=True)
+                st.markdown(f"**Priority:** `{sleep_plan.get('priority', 'MAINTAIN')}`", unsafe_allow_html=True)
+                st.markdown(f"**Target Sleep:** `{sleep_plan.get('target_sleep_hours', '7-9 hours')}`", unsafe_allow_html=True)
+                st.markdown(f"**Focus:** {sleep_plan.get('focus_area', 'Sleep improvement')}", unsafe_allow_html=True)
+                
+                st.markdown("**Recommendations:**")
+                for i, rec in enumerate(sleep_plan.get('recommendations', []), 1):
+                    st.markdown(f"{i}. {rec}")
+                
+                if sleep_plan.get('bedtime_routine'):
+                    st.markdown("**Bedtime Routine:**")
+                    for i, step in enumerate(sleep_plan.get('bedtime_routine', []), 1):
+                        st.markdown(f"{i}. {step}")
+                
+                if sleep_plan.get('sleep_hygiene_essentials'):
+                    st.markdown("**Sleep Hygiene Essentials:**")
+                    for item in sleep_plan.get('sleep_hygiene_essentials', []):
+                        st.markdown(f"- {item}")
+            
+            # Weekly Goals
+            with plan_tab4:
+                weekly_goals = health_plan.get('weekly_goals', {})
+                st.markdown(f"### 📊 Weekly Goals (Week {weekly_goals.get('week_number', 1)})", unsafe_allow_html=True)
+                st.markdown(f"**Cluster:** {weekly_goals.get('cluster_name', 'Unknown')}", unsafe_allow_html=True)
+                st.markdown(f"**Duration:** {weekly_goals.get('duration', '7 days')}", unsafe_allow_html=True)
+                
+                goals_list = weekly_goals.get('goals', [])
+                if goals_list:
+                    for goal in goals_list:
+                        with st.container():
+                            col1, col2 = st.columns([3, 1])
+                            with col1:
+                                st.markdown(f"**{goal.get('category', 'Goal')}** ({goal.get('priority', 'MEDIUM')})")
+                                st.markdown(f"🎯 **Target:** {goal.get('target', 'N/A')}")
+                                st.markdown(f"📏 **Measurement:** {goal.get('measurement', 'N/A')}")
+                                st.markdown(f"✅ **Success:** {goal.get('success_criteria', 'N/A')}")
+                            with col2:
+                                st.markdown(f"<h3 style='text-align: center; color: {theme.get_color('primary')}'>{goal.get('points', 0)}</h3>", unsafe_allow_html=True)
+                                st.markdown("Points")
+                
+                overview = weekly_goals.get('overview', {})
+                st.markdown(f"**Total Possible Points:** {overview.get('total_max_points', 0)}")
+            
+            # Alerts
+            with plan_tab5:
+                alerts = health_plan.get('alerts', {})
+                
+                critical_alerts = alerts.get('critical_alerts', [])
+                high_alerts = alerts.get('high_alerts', [])
+                
+                if critical_alerts:
+                    st.markdown("### 🚨 CRITICAL ALERTS")
+                    for alert in critical_alerts:
+                        with st.container():
+                            st.markdown(f"**{alert.get('type', 'Alert')}**")
+                            st.error(alert.get('message', 'Critical alert detected'))
+                            st.markdown(f"**Action Required:** {alert.get('action', 'Seek professional help')}")
+                            st.markdown(f"**Urgency:** `{alert.get('urgency', 'IMMEDIATE')}`")
+                
+                if high_alerts:
+                    st.markdown("### ⚠️⚠️ HIGH ALERTS")
+                    for alert in high_alerts:
+                        with st.container():
+                            st.markdown(f"**{alert.get('type', 'Alert')}**")
+                            st.warning(alert.get('message', 'High alert detected'))
+                            st.markdown(f"**Action Required:** {alert.get('action', 'Begin intervention')}")
+                            st.markdown(f"**Urgency:** `{alert.get('urgency', 'WEEK 1')}`")
+                
+                if not critical_alerts and not high_alerts:
+                    st.success("✅ No critical or high alerts. Continue following your health plan!")
+                
+                summary = alerts.get('summary', {})
+                if summary.get('next_steps'):
+                    st.markdown("### 📋 Next Steps")
+                    for i, step in enumerate(summary.get('next_steps', []), 1):
+                        st.markdown(f"{i}. {step}")
+            
+            # Download/Share options
+            st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
+            col1, col2 = st.columns(2)
+            with col1:
+                if st.button("💾 Download Plan (JSON)", use_container_width=True):
+                    import json
+                    json_str = json.dumps(health_plan, indent=2, default=str)
+                    st.download_button(
+                        label="Download Health Plan",
+                        data=json_str,
+                        file_name=f"health_plan_{st.session_state.user_id}.json",
+                        mime="application/json"
+                    )
+            
+            with col2:
+                if st.button("📧 Share Plan", use_container_width=True):
+                    st.info("💡 Copy the plan JSON and share with your healthcare provider or save for your records")
+        
+        except Exception as e:
+            st.error(f"Error generating health plan: {str(e)}")
+            logger.error(f"Health plan generation error: {e}", exc_info=True)
     
     st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
     

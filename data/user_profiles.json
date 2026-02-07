@@ -200,30 +200,28 @@
     {
       "user_id": "abi",
       "data": {
-        "age": 18,
+        "age": 30,
         "gender": "Male",
-        "height_cm": 185,
-        "weight_kg": 68.0,
-        "medical_conditions": "na",
+        "height_cm": 175,
+        "weight_kg": 75.0,
+        "medical_conditions": "None",
         "average_steps": 5000.0,
         "average_sleep_hours": 7.0,
         "average_water_intake": 2.0,
-        "steps_std_dev": NaN,
-        "sleep_std_dev": NaN,
-        "water_std_dev": NaN,
-        "total_records": 1,
-        "days_tracked": 1,
-        "bmi": 19.87,
+        "steps_std_dev": 0.0,
+        "sleep_std_dev": 0.0,
+        "water_std_dev": 0.0,
+        "total_records": 5,
+        "days_tracked": 5,
+        "bmi": 24.49,
         "bmi_category": "Normal Weight",
         "activity_level": "Lightly Active",
         "sleep_category": "Optimal",
         "hydration_level": "Adequate",
-        "health_risks": [
-          "Medical Conditions: na - Follow doctor's advice"
-        ]
+        "health_risks": []
       },
       "created_at": "2026-02-06T21:55:56.391926",
-      "last_updated": "2026-02-06T21:55:56.391926"
+      "last_updated": "2026-02-07T14:38:38.720489"
     },
     {
       "user_id": "abivk",
