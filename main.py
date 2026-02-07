@@ -2,6 +2,7 @@
 main.py - Professional Streamlit Dashboard for Personal Health Coach AI
 Interactive web interface with modern UI, charts, and data management
 Theme-aware UI that automatically adapts to light/dark mode
+Enhanced with ML-powered AI recommendations and user clustering
 """
 
 import streamlit as st
@@ -11,12 +12,17 @@ import plotly.express as px
 from datetime import datetime
 import os
 from pathlib import Path
+import logging
 
 # Import custom modules
 from modules.data_input import HealthDataCollector
 from modules.file_storage import JSONHealthStorage
 from modules.profile_summarizer import HealthProfileSummarizer
 from modules.recommendation_engine import RecommendationEngine
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Import Gemini integration if available
 try:
@@ -443,6 +449,15 @@ def initialize_session_state():
         st.session_state.storage = JSONHealthStorage(data_dir="data")
     if "current_page" not in st.session_state:
         st.session_state.current_page = "Home"
+    
+    # Initialize ML engine for AI-powered recommendations
+    if "ml_initialized" not in st.session_state:
+        try:
+            RecommendationEngine.initialize_ml_engine(data_dir="data", model_dir="models")
+            st.session_state.ml_initialized = True
+        except Exception as e:
+            st.session_state.ml_initialized = False
+            print(f"⚠️ ML engine initialization warning: {e}")
 
 
 # ============================================================================

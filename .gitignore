@@ -50,12 +50,17 @@ Thumbs.db
 .env.local
 .env.*.local
 
-# User data and profiles
+# ML Models (large trained models - exclude from repo)
+models/
+*.joblib
+*.pkl
+*.pickle
+
+# Data files (user records and profiles - exclude from repo)
+data/user_records.json
 data/user_profiles.json
-data/health_records.json
 
 # OS
-.DS_Store
 .DS_Store?
 ._*
 .Spotlight-V100
@@ -74,3 +79,14 @@ logs/
 *.tmp
 temp/
 tmp/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Type checking
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/

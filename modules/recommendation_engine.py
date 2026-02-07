@@ -1,10 +1,14 @@
 """
 recommendation_engine.py - Intelligent recommendation generation
 Analyzes health profiles and generates personalized health recommendations
-Enhanced with Gemini AI for personalization
+Enhanced with ML-powered predictions and user clustering for AI-driven personalization
+Also supports Gemini AI for additional enhancement
 """
 
+import logging
 from typing import List, Dict, Optional, Any
+from pathlib import Path
+
 from modules.profile_summarizer import HealthProfileSummarizer
 
 try:
@@ -13,9 +17,117 @@ try:
 except ImportError:
     GEMINI_AVAILABLE = False
 
+# ML Integration
+try:
+    from modules.ai_health_engine import AIHealthEngine, AIRecommendationGenerator
+    ML_AVAILABLE = True
+except ImportError:
+    ML_AVAILABLE = False
+
+# Configure logging
+logger = logging.getLogger(__name__)
+
 
 class RecommendationEngine:
     """Generates personalized health recommendations based on user profiles"""
+    
+    # Class variables for ML engine initialization
+    _ai_engine = None
+    _ai_recommendation_generator = None
+    _ml_initialized = False
+    
+    @classmethod
+    def initialize_ml_engine(cls, data_dir: str = "data", model_dir: str = "models") -> bool:
+        """
+        Initialize and train ML models for AI-powered recommendations
+        
+        Args:
+            data_dir: Directory containing user_records.json and user_profiles.json
+            model_dir: Directory to store/load trained models
+            
+        Returns:
+            True if initialization successful, False otherwise
+        """
+        if not ML_AVAILABLE:
+            logger.warning("⚠️ scikit-learn not available. Using rule-based recommendations.")
+            return False
+        
+        try:
+            if cls._ml_initialized:
+                logger.info("✅ ML engine already initialized")
+                return True
+            
+            logger.info("🚀 Initializing ML Health Engine...")
+            
+            # Initialize engine
+            cls._ai_engine = AIHealthEngine(model_dir=model_dir)
+            
+            # Try to load existing models
+            if cls._ai_engine.load_models(model_dir):
+                logger.info("✅ Loaded pre-trained ML models from disk")
+                cls._ai_recommendation_generator = AIRecommendationGenerator(cls._ai_engine)
+                cls._ml_initialized = True
+                return True
+            
+            # If no saved models, train new ones
+            logger.info("📊 Training ML models from health data...")
+            
+            # Prepare training data
+            records_file = Path(data_dir) / "user_records.json"
+            profiles_file = Path(data_dir) / "user_profiles.json"
+            
+            if not records_file.exists() or not profiles_file.exists():
+                logger.warning(f"⚠️ Data files not found in {data_dir}")
+                # Will use synthetic data
+                pass
+            
+            # Prepare data and train models
+            df, success = cls._ai_engine.prepare_training_data_from_json(
+                str(records_file), str(profiles_file)
+            )
+            
+            if not success:
+                logger.error("❌ Failed to prepare training data")
+                return False
+            
+            # Train predictive models
+            if not cls._ai_engine.train_models(df):
+                logger.error("❌ Failed to train predictive models")
+                return False
+            
+            # Train clustering
+            if not cls._ai_engine.train_clustering(df, n_clusters=4):
+                logger.error("❌ Failed to train clustering model")
+                return False
+            
+            # Save models
+            cls._ai_engine.save_models(model_dir)
+            
+            # Initialize recommendation generator
+            cls._ai_recommendation_generator = AIRecommendationGenerator(cls._ai_engine)
+            
+            cls._ml_initialized = True
+            logger.info("✅ ML engine initialized and trained successfully")
+            return True
+            
+        except Exception as e:
+            logger.error(f"❌ Error initializing ML engine: {e}")
+            return False
+    
+    @classmethod
+    def get_ml_status(cls) -> Dict[str, Any]:
+        """
+        Get status of ML engine
+        
+        Returns:
+            Dictionary with ML status information
+        """
+        return {
+            'ml_available': ML_AVAILABLE,
+            'ml_initialized': cls._ml_initialized,
+            'engine': cls._ai_engine is not None,
+            'recommendation_generator': cls._ai_recommendation_generator is not None
+        }
     
     @staticmethod
     def generate_exercise_recommendations(profile: Dict[str, Any]) -> List[str]:
@@ -222,25 +334,69 @@ class RecommendationEngine:
         
         return alerts if alerts else ["✅ No major health risks identified. Keep up healthy habits!"]
     
-    @staticmethod
-    def generate_comprehensive_recommendations(profile: Dict[str, Any], use_ai_enhancement: bool = True) -> Dict[str, List[str]]:
+    @classmethod
+    def generate_comprehensive_recommendations(
+        cls, 
+        profile: Dict[str, Any], 
+        use_ai_enhancement: bool = True,
+        use_ml_predictions: bool = True
+    ) -> Dict[str, List[str]]:
         """
-        Generate comprehensive personalized recommendations
+        Generate comprehensive personalized recommendations using ML or rule-based logic
         
         Args:
             profile: User health profile
             use_ai_enhancement: Whether to enhance with Gemini AI (if available)
+            use_ml_predictions: Whether to use ML models for predictions (if available)
             
         Returns:
             Dictionary containing all recommendation categories
         """
-        recommendations = {
-            "exercise": RecommendationEngine.generate_exercise_recommendations(profile),
-            "diet": RecommendationEngine.generate_diet_recommendations(profile),
-            "sleep": RecommendationEngine.generate_sleep_recommendations(profile),
-            "hydration": RecommendationEngine.generate_hydration_reminders(profile),
-            "health_alerts": RecommendationEngine.generate_health_alerts(profile)
-        }
+        # Try ML-powered recommendations first
+        if use_ml_predictions and cls._ml_initialized and cls._ai_recommendation_generator:
+            try:
+                logger.info("🤖 Using ML-powered AI recommendations")
+                
+                # Prepare features for ML prediction
+                user_features = {
+                    'age': profile.get('age', 35),
+                    'bmi': profile.get('bmi', 25),
+                    'daily_steps': profile.get('average_steps', 7000),
+                    'sleep_hours': profile.get('average_sleep_hours', 7.5),
+                    'water_intake': profile.get('average_water_intake', 2.5),
+                }
+                
+                # Get ML predictions
+                health_risks = cls._ai_engine.predict_health_risks(user_features)
+                cluster_info = cls._ai_engine.assign_user_cluster(user_features)
+                
+                # Generate ML-driven recommendations
+                recommendations = cls._ai_recommendation_generator.generate_ml_driven_recommendations(
+                    profile, health_risks, cluster_info
+                )
+                
+                logger.info("✅ ML recommendations generated successfully")
+                
+            except Exception as e:
+                logger.error(f"❌ Error with ML recommendations, falling back: {e}")
+                # Fall back to rule-based logic
+                recommendations = {
+                    "exercise": RecommendationEngine.generate_exercise_recommendations(profile),
+                    "diet": RecommendationEngine.generate_diet_recommendations(profile),
+                    "sleep": RecommendationEngine.generate_sleep_recommendations(profile),
+                    "hydration": RecommendationEngine.generate_hydration_reminders(profile),
+                    "health_alerts": RecommendationEngine.generate_health_alerts(profile)
+                }
+        else:
+            # Use rule-based recommendations
+            logger.info("📋 Using rule-based recommendations")
+            recommendations = {
+                "exercise": RecommendationEngine.generate_exercise_recommendations(profile),
+                "diet": RecommendationEngine.generate_diet_recommendations(profile),
+                "sleep": RecommendationEngine.generate_sleep_recommendations(profile),
+                "hydration": RecommendationEngine.generate_hydration_reminders(profile),
+                "health_alerts": RecommendationEngine.generate_health_alerts(profile)
+            }
         
         # Enhance with Gemini AI if available and enabled
         if use_ai_enhancement and GEMINI_AVAILABLE:
@@ -248,9 +404,66 @@ class RecommendationEngine:
                 advisor = get_gemini_advisor()
                 recommendations = advisor.enhance_recommendations(recommendations, profile)
             except Exception as e:
-                print(f"⚠️ AI enhancement skipped: {e}")
+                logger.warning(f"⚠️ Gemini enhancement skipped: {e}")
         
         return recommendations
+    
+    @classmethod
+    def get_ml_health_risks(cls, profile: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        """
+        Get ML-predicted health risks for a user
+        
+        Args:
+            profile: User health profile
+            
+        Returns:
+            Dictionary with ML-predicted health risks or None if ML unavailable
+        """
+        if not cls._ml_initialized or not cls._ai_engine:
+            logger.debug("ML engine not initialized")
+            return None
+        
+        try:
+            user_features = {
+                'age': profile.get('age', 35),
+                'bmi': profile.get('bmi', 25),
+                'daily_steps': profile.get('average_steps', 7000),
+                'sleep_hours': profile.get('average_sleep_hours', 7.5),
+                'water_intake': profile.get('average_water_intake', 2.5),
+            }
+            
+            return cls._ai_engine.predict_health_risks(user_features)
+        except Exception as e:
+            logger.error(f"Error getting ML health risks: {e}")
+            return None
+    
+    @classmethod
+    def get_user_cluster_assignment(cls, profile: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        """
+        Get user's cluster assignment and personalization info
+        
+        Args:
+            profile: User health profile
+            
+        Returns:
+            Dictionary with cluster assignment or None if ML unavailable
+        """
+        if not cls._ml_initialized or not cls._ai_engine:
+            logger.debug("ML engine not initialized")
+            return None
+        
+        try:
+            user_features = {
+                'daily_steps': profile.get('average_steps', 7000),
+                'bmi': profile.get('bmi', 25),
+                'sleep_hours': profile.get('average_sleep_hours', 7.5),
+                'water_intake': profile.get('average_water_intake', 2.5),
+            }
+            
+            return cls._ai_engine.assign_user_cluster(user_features)
+        except Exception as e:
+            logger.error(f"Error assigning user cluster: {e}")
+            return None
     
     @staticmethod
     def get_personalized_ai_plan(profile: Dict[str, Any]) -> Optional[str]:
