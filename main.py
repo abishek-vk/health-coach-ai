@@ -1447,7 +1447,7 @@ def main():
     st.markdown(f"""
     <div class="footer">
         <p>© 2026 Personal Health Coach AI | Built with Streamlit, Pandas, Plotly & NumPy</p>
-        <p style="font-size: 0.75rem;">Privacy-focused | Local storage | No cloud data</p>
+        <p style="font-size: 0.75rem;"></p>
     </div>
     """, unsafe_allow_html=True)
 
