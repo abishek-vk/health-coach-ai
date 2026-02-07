@@ -1301,8 +1301,17 @@ def page_recommendations():
                     else:
                         st.info("Unable to generate insights at this time.")
         else:
-            st.warning("⚠️ AI features not available. Gemini API not configured.")
-            st.info("To enable AI features:\n1. Set your GEMINI_API_KEY in .env\n2. Install: `pip install google-generativeai`\n3. Restart the app")
+            try:
+                advisor = get_gemini_advisor()
+                if advisor.initialization_error:
+                    st.warning(f"⚠️ AI features temporarily unavailable: {advisor.initialization_error}")
+                    st.info("💡 **Solutions:**\n1. Check your API quota at [Google AI Studio](https://aistudio.google.com/)\n2. Verify billing is active\n3. Restart the app")
+                else:
+                    st.warning("⚠️ AI features not available. Gemini API not configured.")
+                    st.info("To enable AI features:\n1. Set your GEMINI_API_KEY in .env\n2. Restart the app")
+            except:
+                st.warning("⚠️ AI features not available. Gemini API not configured.")
+                st.info("To enable AI features:\n1. Set your GEMINI_API_KEY in .env\n2. Restart the app")
     
     st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
     

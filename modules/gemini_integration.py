@@ -13,24 +13,79 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
+# =====================================================================
+# MODEL CONFIGURATION - CENTRALIZED
+# =====================================================================
+# Preferred model with fallback options (in order of preference)
+# Updated to use latest available Gemini 2.5 models
+PREFERRED_MODELS = [
+    "gemini-2.5-flash",      # Preferred: Latest, fastest, cost-efficient
+    "gemini-2.5-pro",        # Fallback: Latest, more capable
+    "gemini-2.0-flash",      # Fallback: Stable, proven
+    "gemini-flash-latest",   # Fallback: Always points to latest
+]
+
+# This will be set during initialization
+ACTIVE_MODEL_NAME = None
+
+
 class GeminiHealthAdvisor:
     """Leverages Gemini API for personalized health recommendations"""
     
     def __init__(self):
         """Initialize Gemini API with credentials from environment"""
+        global ACTIVE_MODEL_NAME
+        
         self.api_key = os.getenv("GEMINI_API_KEY")
         self.enabled = os.getenv("ENABLE_GEMINI_ENHANCEMENTS", "true").lower() == "true"
+        self.model = None
+        self.initialization_error = None
         
         if self.enabled and self.api_key:
             try:
                 genai.configure(api_key=self.api_key)
-                # Use gemini-pro (stable, widely available model)
-                self.model = genai.GenerativeModel('gemini-pro')
+                
+                # Try models in order of preference
+                for model_name in PREFERRED_MODELS:
+                    try:
+                        candidate_model = genai.GenerativeModel(model_name)
+                        # Test if model is accessible with a simple request
+                        test_response = candidate_model.generate_content(
+                            "This is a test message.",
+                            stream=False
+                        )
+                        # If successful, use this model
+                        self.model = candidate_model
+                        ACTIVE_MODEL_NAME = model_name
+                        print(f"✅ Gemini API initialized with model: {model_name}")
+                        return
+                    except Exception as model_error:
+                        error_msg = str(model_error)
+                        print(f"⚠️ Model {model_name} unavailable: {error_msg[:100]}")
+                        
+                        # Store quota errors for diagnostic purposes
+                        if "429" in error_msg or "quota" in error_msg.lower():
+                            self.initialization_error = f"API quota exceeded: {error_msg[:150]}"
+                        
+                        continue
+                
+                # If all models failed
+                if self.initialization_error:
+                    print(f"⚠️ {self.initialization_error}")
+                    print("💡 Solution: Check your Gemini API quota and billing at https://aistudio.google.com/")
+                else:
+                    print("❌ No Gemini models available. Disabling AI enhancements.")
+                
+                self.enabled = False
+                ACTIVE_MODEL_NAME = None
+                
             except Exception as e:
                 print(f"⚠️ Warning: Failed to initialize Gemini API: {e}")
                 self.enabled = False
+                ACTIVE_MODEL_NAME = None
         else:
             self.enabled = False
+            ACTIVE_MODEL_NAME = None
     
     def enhance_recommendations(
         self, 
@@ -292,3 +347,12 @@ def get_gemini_advisor() -> GeminiHealthAdvisor:
     if _gemini_advisor is None:
         _gemini_advisor = GeminiHealthAdvisor()
     return _gemini_advisor
+
+
+def get_active_model_name() -> Optional[str]:
+    """Get the currently active Gemini model name"""
+    global ACTIVE_MODEL_NAME
+    if ACTIVE_MODEL_NAME is None:
+        # Ensure advisor is initialized
+        get_gemini_advisor()
+    return ACTIVE_MODEL_NAME

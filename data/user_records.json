@@ -685,6 +685,62 @@
         "sleep_hours": 7.0,
         "water_intake_liters": 2.0
       }
+    },
+    {
+      "user_id": "abi",
+      "timestamp": "2026-02-07T08:14:16.423918",
+      "data": {
+        "age": 30,
+        "gender": "Male",
+        "height_cm": 175,
+        "weight_kg": 75.0,
+        "medical_conditions": "None",
+        "daily_steps": 5000,
+        "sleep_hours": 7.0,
+        "water_intake_liters": 2.0
+      }
+    },
+    {
+      "user_id": "deepika",
+      "timestamp": "2026-02-07T08:18:48.284197",
+      "data": {
+        "age": 18,
+        "gender": "Female",
+        "height_cm": 175,
+        "weight_kg": 63.0,
+        "medical_conditions": "None",
+        "daily_steps": 7500,
+        "sleep_hours": 7.0,
+        "water_intake_liters": 2.0
+      }
+    },
+    {
+      "user_id": "shanju",
+      "timestamp": "2026-02-07T08:21:24.865995",
+      "data": {
+        "age": 19,
+        "gender": "Female",
+        "height_cm": 175,
+        "weight_kg": 67.0,
+        "medical_conditions": "None",
+        "daily_steps": 8000,
+        "sleep_hours": 7.5,
+        "water_intake_liters": 2.3
+      }
+    },
+    {
+      "user_id": "abishek",
+      "timestamp": "2026-02-07T08:23:54.552628",
+      "data": {
+        "age": 30,
+        "gender": "Male",
+        "height_cm": 175,
+        "weight_kg": 75.0,
+        "medical_conditions": "None",
+        "daily_steps": 5000,
+        "sleep_hours": 7.0,
+        "water_intake_liters": 2.0
+      }
     }
   ]
 }
