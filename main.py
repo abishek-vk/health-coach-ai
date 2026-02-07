@@ -450,6 +450,12 @@ def initialize_session_state():
     if "current_page" not in st.session_state:
         st.session_state.current_page = "Home"
     
+    # Store user profile data (persists until logout)
+    if "user_profile_data" not in st.session_state:
+        st.session_state.user_profile_data = None
+    if "user_daily_metrics" not in st.session_state:
+        st.session_state.user_daily_metrics = None
+    
     # Initialize ML engine for AI-powered recommendations
     if "ml_initialized" not in st.session_state:
         try:
@@ -780,6 +786,17 @@ def page_home():
 
 
 
+def load_user_profile_data(user_id):
+    """Load user's previously saved profile data from storage"""
+    try:
+        # Get user's last profile
+        profile = st.session_state.storage.get_user_profile(user_id)
+        if profile:
+            return profile.get('data', None)
+    except Exception as e:
+        logger.warning(f"Could not load user profile: {e}")
+    return None
+
 def page_input_health_data():
     """Page for inputting health data with enhanced UI"""
     st.markdown("""
@@ -796,6 +813,24 @@ def page_input_health_data():
     </div>
     """, unsafe_allow_html=True)
     
+    # Load user profile data if not already loaded (persists in session)
+    if st.session_state.user_profile_data is None:
+        st.session_state.user_profile_data = load_user_profile_data(st.session_state.user_id)
+    
+    # Set defaults from saved data or use fallback values
+    default_age = st.session_state.user_profile_data.get('age', 30) if st.session_state.user_profile_data else 30
+    default_gender = st.session_state.user_profile_data.get('gender', 'Male') if st.session_state.user_profile_data else 'Male'
+    default_height = st.session_state.user_profile_data.get('height_cm', 175) if st.session_state.user_profile_data else 175
+    default_weight = st.session_state.user_profile_data.get('weight_kg', 75.0) if st.session_state.user_profile_data else 75.0
+    default_medical = st.session_state.user_profile_data.get('medical_conditions', '') if st.session_state.user_profile_data else ''
+    default_steps = st.session_state.user_profile_data.get('average_steps', 5000) if st.session_state.user_profile_data else 5000
+    default_sleep = st.session_state.user_profile_data.get('average_sleep_hours', 7.0) if st.session_state.user_profile_data else 7.0
+    default_water = st.session_state.user_profile_data.get('average_water_intake', 2.0) if st.session_state.user_profile_data else 2.0
+    
+    # Display when data was last updated
+    if st.session_state.user_profile_data:
+        st.info(f"✅ Last updated: {st.session_state.user_profile_data.get('last_updated', 'Unknown')}")
+    
     # Create tabs for different data input sections
     tab1, tab2 = st.tabs(["Basic Information", "Daily Metrics"])
     
@@ -811,7 +846,7 @@ def page_input_health_data():
                 "Age (years)",
                 min_value=1,
                 max_value=150,
-                value=30,
+                value=int(default_age),
                 step=1,
                 key="age_input"
             )
@@ -819,7 +854,7 @@ def page_input_health_data():
                 "Height (cm)",
                 min_value=30,
                 max_value=300,
-                value=175,
+                value=int(default_height),
                 step=1,
                 key="height_input"
             )
@@ -828,19 +863,21 @@ def page_input_health_data():
             gender = st.selectbox(
                 "Gender",
                 ["Male", "Female", "Other", "Prefer not to say"],
+                index=["Male", "Female", "Other", "Prefer not to say"].index(default_gender) if default_gender in ["Male", "Female", "Other", "Prefer not to say"] else 0,
                 key="gender_input"
             )
             weight = st.number_input(
                 "Weight (kg)",
                 min_value=1.0,
                 max_value=300.0,
-                value=75.0,
+                value=float(default_weight),
                 step=0.5,
                 key="weight_input"
             )
         
         medical_conditions = st.text_area(
             "Medical Conditions (if any)",
+            value=default_medical,
             placeholder="Enter any chronic conditions, allergies, or health concerns...",
             height=100,
             key="medical_conditions_input"
@@ -866,7 +903,7 @@ def page_input_health_data():
                 "Daily Steps",
                 min_value=0,
                 max_value=100000,
-                value=5000,
+                value=int(default_steps),
                 step=100,
                 key="daily_steps_input"
             )
@@ -876,7 +913,7 @@ def page_input_health_data():
                 "Sleep Hours",
                 min_value=0.0,
                 max_value=24.0,
-                value=7.0,
+                value=float(default_sleep),
                 step=0.5,
                 key="sleep_hours_input"
             )
@@ -886,7 +923,7 @@ def page_input_health_data():
                 "Water Intake (liters)",
                 min_value=0.0,
                 max_value=20.0,
-                value=2.0,
+                value=float(default_water),
                 step=0.1,
                 key="water_intake_input"
             )
@@ -953,6 +990,8 @@ def page_input_health_data():
                 
                 # Save to storage
                 if st.session_state.storage.add_health_record(st.session_state.user_id, health_record):
+                    # Update session state with new data
+                    st.session_state.user_profile_data = load_user_profile_data(st.session_state.user_id)
                     st.success("Health data saved successfully!")
                     st.balloons()
                 else:
@@ -1428,6 +1467,8 @@ def main():
             if st.button("Logout", use_container_width=True):
                 st.session_state.user_id = None
                 st.session_state.current_page = "Home"
+                st.session_state.user_profile_data = None
+                st.session_state.user_daily_metrics = None
                 st.rerun()
         else:
             st.markdown(f"""
