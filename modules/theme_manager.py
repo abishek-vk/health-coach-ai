@@ -285,6 +285,17 @@ class ThemeManager:
             color: {colors['text_primary']};
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         }}
+
+        [data-testid="stAppViewContainer"],
+        [data-testid="stAppViewContainer"] .main,
+        [data-testid="stAppViewBlockContainer"] {{
+            background-color: {colors['bg_main']} !important;
+            color: {colors['text_primary']} !important;
+        }}
+
+        [data-testid="stHeader"] {{
+            background: transparent !important;
+        }}
         
         /* Professional Header with Enhanced Design */
         .header-container {{
@@ -568,6 +579,25 @@ class ThemeManager:
             transition: all 0.2s ease !important;
             font-family: 'Inter', sans-serif !important;
         }}
+
+        [data-testid="stTextInput"] input,
+        [data-testid="stTextArea"] textarea,
+        [data-testid="stNumberInput"] input,
+        [data-baseweb="select"] > div,
+        [data-baseweb="select"] input,
+        [data-baseweb="select"] span,
+        [data-baseweb="base-input"] > div,
+        [data-baseweb="input"] > div {{
+            background-color: {colors['bg_secondary']} !important;
+            color: {colors['text_primary']} !important;
+            border-color: {colors['border']} !important;
+        }}
+
+        [data-testid="stNumberInput"] button,
+        [data-baseweb="select"] svg {{
+            color: {colors['text_secondary']} !important;
+            fill: {colors['text_secondary']} !important;
+        }}
         
         .stTextInput > div > div > input:focus,
         .stSelectbox > div > div > select:focus,
@@ -577,6 +607,13 @@ class ThemeManager:
             box-shadow: 0 0 0 3px {colors['input_focus_shadow']} !important;
             background-color: {colors['card_hover']} !important;
         }}
+
+        [data-baseweb="select"] > div:focus-within,
+        [data-baseweb="base-input"] > div:focus-within,
+        [data-baseweb="input"] > div:focus-within {{
+            border-color: {colors['primary']} !important;
+            box-shadow: 0 0 0 3px {colors['input_focus_shadow']} !important;
+        }}
         
         /* Professional Labels */
         .stLabel > label {{
@@ -585,6 +622,29 @@ class ThemeManager:
             font-size: 0.9rem !important;
             margin-bottom: 10px !important;
             letter-spacing: 0.2px !important;
+        }}
+
+        [data-testid="stWidgetLabel"] p,
+        [data-testid="stMetricLabel"] p {{
+            color: {colors['text_secondary']} !important;
+            font-weight: 600 !important;
+        }}
+
+        [data-testid="stMetric"] {{
+            background-color: {colors['bg_secondary']} !important;
+            border: 1px solid {colors['border']} !important;
+            border-radius: 12px !important;
+            padding: 12px 14px !important;
+        }}
+
+        [data-testid="stMetricValue"] {{
+            color: {colors['text_primary']} !important;
+        }}
+
+        .stAlert {{
+            background-color: {colors['bg_secondary']} !important;
+            border-color: {colors['border']} !important;
+            color: {colors['text_primary']} !important;
         }}
         
         /* Divider */

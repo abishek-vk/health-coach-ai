@@ -860,8 +860,8 @@ def page_input_health_data():
     tab1, tab2 = st.tabs(["Basic Information", "Daily Metrics"])
     
     with tab1:
-        st.markdown("""
-        <h3 style="color: #2E7D32; margin-bottom: 20px;">Your Basic Health Profile</h3>
+        st.markdown(f"""
+        <h3 style="color: {theme.get_color('primary')}; margin-bottom: 20px;">Your Basic Health Profile</h3>
         """, unsafe_allow_html=True)
         
         col1, col2 = st.columns(2, gap="medium")
@@ -1159,8 +1159,8 @@ def page_health_summary():
     st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
     
     # ========== CHARTS & VISUALIZATIONS ==========
-    st.markdown("""
-    <h3 style="color: #2E7D32; margin-bottom: 20px;">Trends & Analysis</h3>
+    st.markdown(f"""
+    <h3 style="color: {theme.get_color('primary')}; margin-bottom: 20px;">Trends & Analysis</h3>
     """, unsafe_allow_html=True)
     
     chart_col1, chart_col2 = st.columns(2, gap="medium")
@@ -1188,8 +1188,8 @@ def page_health_summary():
     st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
     
     # ========== HEALTH RISKS ==========
-    st.markdown("""
-    <h3 style="color: #2E7D32; margin-bottom: 20px;">⚠️ Health Indicators</h3>
+    st.markdown(f"""
+    <h3 style="color: {theme.get_color('primary')}; margin-bottom: 20px;">⚠️ Health Indicators</h3>
     """, unsafe_allow_html=True)
     
     if profile.get("health_risks"):
