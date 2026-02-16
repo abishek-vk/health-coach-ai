@@ -19,6 +19,7 @@ from modules.data_input import HealthDataCollector
 from modules.file_storage import JSONHealthStorage
 from modules.profile_summarizer import HealthProfileSummarizer
 from modules.recommendation_engine import RecommendationEngine
+from modules.theme_manager import ThemeManager
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -34,7 +35,7 @@ except ImportError:
 # ============================================================================
 # THEME MANAGEMENT SYSTEM
 # ============================================================================
-class ThemeManager:
+class LegacyThemeManager:
     """Manages theme-aware colors and styling based on Streamlit's active theme"""
     
     def __init__(self):
@@ -432,8 +433,8 @@ def generate_theme_css(theme):
     """
     return css
 
-# Apply dynamic theme CSS
-st.markdown(generate_theme_css(theme), unsafe_allow_html=True)
+# Apply dynamic theme CSS from theme manager
+st.markdown(theme.get_theme_css(), unsafe_allow_html=True)
 
 
 # ============================================================================
@@ -1622,7 +1623,7 @@ def main():
     with st.sidebar:
         st.markdown("""
         <div class="sidebar-container">
-            <h3 style="margin-top: 0;">Navigation</h3>
+            <h3 style="margin-top: 0;">🧭 Navigation</h3>
         </div>
         """, unsafe_allow_html=True)
         
@@ -1645,8 +1646,8 @@ def main():
         if st.session_state.user_id:
             st.markdown(f"""
             <div class="user-info">
-                <strong>Current User</strong><br/>
-                <code style="color: {theme.get_color('warning')}; font-weight: bold;">{st.session_state.user_id}</code>
+                <strong>👤 Current User</strong><br/>
+                <code style="color: {theme.get_color('accent')}; font-weight: bold;">{st.session_state.user_id}</code>
             </div>
             """, unsafe_allow_html=True)
             
@@ -1664,13 +1665,49 @@ def main():
             </div>
             """, unsafe_allow_html=True)
         
-        st.markdown("""<div style="margin: 30px 0;"></div>""", unsafe_allow_html=True)
+        st.markdown("""<div style="margin: 24px 0;"></div>""", unsafe_allow_html=True)
+        
+        # Theme switcher
+        st.markdown(f"""
+        <div style="background: {theme.get_color('bg_tertiary')}; padding: 16px; border-radius: 12px; border: 1px solid {theme.get_color('border')};">
+            <p style="margin: 0 0 12px 0; font-weight: 600; font-size: 0.9rem; color: {theme.get_color('text_primary')};"><span class="theme-indicator"></span>Theme</p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        available_themes = theme.get_available_themes()
+        current_theme = theme.get_theme_name()
+        
+        # Create nice display names for themes
+        theme_display_names = {
+            "light": "☀️ Light",
+            "dark": "🌙 Dark",
+            "modern": "✨ Modern",
+            "nature": "🌿 Nature"
+        }
+        
+        selected_theme_display = st.selectbox(
+            "Choose Theme",
+            available_themes,
+            index=available_themes.index(current_theme),
+            format_func=lambda x: theme_display_names.get(x, x.title()),
+            key="theme_select",
+            label_visibility="collapsed"
+        )
+        
+        if selected_theme_display != current_theme:
+            theme.set_theme(selected_theme_display)
+            st.rerun()
+        
+        st.markdown("""<div style="margin: 24px 0;"></div>""", unsafe_allow_html=True)
         
         # App info
         st.markdown(f"""
         <div style="text-align: center; color: {theme.get_color('text_secondary')}; font-size: 0.85rem;">
-            <p><strong>Health Coach AI</strong><br/>v2.0 - Professional Edition</p>
-            <p>Built with ❤️ using Streamlit<br/>& AI Technology</p>
+            <p><strong>🏥 Health Coach AI</strong><br/>v2.0 - Professional Edition</p>
+            <p>Built with ❤️ using Streamlit<br/>& Google Gemini AI</p>
+            <p style="font-size: 0.8rem; margin-top: 12px; color: {theme.get_color('text_muted')};">
+                <strong>Current Theme:</strong> {theme_display_names.get(current_theme, current_theme.title())}
+            </p>
         </div>
         """, unsafe_allow_html=True)
     
